@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en" class="light">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atrium — Academic Mentorship for Course Selection & College Prep</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              paper: '#F7F4EE',
+              'paper-2': '#EFEAE0',
+              canvas: '#FFFFFF',
+              ink: '#0E1726',
+              'ink-soft': '#1F2A3D',
+              slate: {
+                50: '#F5F6F8',
+                100: '#E9ECF1',
+                200: '#D6DBE3',
+                300: '#B7BFCB',
+                400: '#8A95A6',
+                500: '#5E6A7E',
+                600: '#404B5E',
+                700: '#2A3447',
+                800: '#1A2233',
+                900: '#0E1726',
+              },
+              bronze: {
+                50: '#FBF5EC',
+                100: '#F2E3CB',
+                200: '#E5C599',
+                300: '#D6A464',
+                400: '#C28A41',
+                500: '#A8722E',
+                600: '#875A24',
+                700: '#65431D',
+              },
+              accent: '#A8722E',
+              'accent-soft': '#F2E3CB',
+              line: '#E2DED4',
+              'line-2': '#D6D2C6',
+            },
+            fontFamily: {
+              serif: ['Fraunces', 'Georgia', 'serif'],
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+              display: ['Fraunces', 'Georgia', 'serif'],
+            },
+            fontSize: {
+              'display-2xl': ['72px', { lineHeight: '1.05', letterSpacing: '-0.02em', fontWeight: '500' }],
+              'display-xl': ['56px', { lineHeight: '1.08', letterSpacing: '-0.02em', fontWeight: '500' }],
+              'display-lg': ['44px', { lineHeight: '1.12', letterSpacing: '-0.015em', fontWeight: '500' }],
+              'display-md': ['34px', { lineHeight: '1.18', letterSpacing: '-0.01em', fontWeight: '500' }],
+              'display-sm': ['26px', { lineHeight: '1.25', letterSpacing: '-0.005em', fontWeight: '500' }],
+              eyebrow: ['12px', { lineHeight: '1.4', letterSpacing: '0.14em', fontWeight: '600' }],
+              body: ['16px', { lineHeight: '1.65', fontWeight: '400' }],
+              'body-lg': ['18px', { lineHeight: '1.65', fontWeight: '400' }],
+            },
+            borderRadius: {
+              DEFAULT: '0.25rem',
+              sm: '0.375rem',
+              md: '0.5rem',
+              lg: '0.75rem',
+              xl: '1rem',
+              '2xl': '1.5rem',
+            },
+            boxShadow: {
+              card: '0 1px 2px rgba(14,23,38,0.04), 0 8px 24px -12px rgba(14,23,38,0.10)',
+              elev: '0 4px 12px rgba(14,23,38,0.06), 0 24px 48px -20px rgba(14,23,38,0.14)',
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
