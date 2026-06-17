@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export function Hero() {
   return (
     <section className="relative bg-paper border-b border-line overflow-hidden">
@@ -25,19 +27,19 @@ export function Hero() {
             </p>
 
             <div className="mt-10 flex flex-wrap items-center gap-4">
-              <a
-                href="#cta"
+              <Link
+                to="/signup?role=student"
                 className="inline-flex items-center gap-2 bg-ink text-paper text-[14px] font-medium px-6 py-3.5 rounded-sm hover:bg-ink-soft transition-colors"
               >
                 Find a mentor
                 <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-              </a>
-              <a
-                href="#mentors"
+              </Link>
+              <Link
+                to="/signup?role=mentor"
                 className="inline-flex items-center gap-2 text-[14px] font-medium text-ink border-b border-ink/40 hover:border-ink pb-1 transition-colors"
               >
                 Apply to mentor
-              </a>
+              </Link>
             </div>
 
             <div className="mt-14 grid grid-cols-3 gap-8 max-w-lg">

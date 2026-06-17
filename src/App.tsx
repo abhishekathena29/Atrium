@@ -1,28 +1,31 @@
-import { TopNavBar } from './components/TopNavBar';
-import { Hero } from './components/Hero';
-import { BentoGrid } from './components/BentoGrid';
-import { Mission } from './components/Mission';
-import { ForMentors } from './components/ForMentors';
-import { FeaturedMentors } from './components/FeaturedMentors';
-import { FinalCTA } from './components/FinalCTA';
-import { Footer } from './components/Footer';
-import { MobileFAB } from './components/MobileFAB';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './auth/AuthContext';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { Home } from './pages/Home';
+import { SignIn } from './pages/SignIn';
+import { SignUp } from './pages/SignUp';
+import { Dashboard } from './pages/dashboard/Dashboard';
 
 function App() {
   return (
-    <div className="font-sans text-ink bg-paper">
-      <TopNavBar />
-      <main className="pt-16">
-        <Hero />
-        <BentoGrid />
-        <Mission />
-        <ForMentors />
-        <FeaturedMentors />
-        <FinalCTA />
-      </main>
-      <Footer />
-      <MobileFAB />
-    </div>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
