@@ -1,125 +1,204 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { findUserById } from '../../auth/AuthContext';
 import type { User } from '../../auth/types';
+import { getStudentState } from '../../engine/studentState';
+import {
+  getMentorApplication,
+  isVetted,
+  listConsults,
+  makeId,
+  saveConsult,
+  saveOutcome,
+  type Consult,
+} from '../../store/db';
+import { IndiaPlanView } from '../../components/plan/IndiaPlanView';
+import { LoadPlanView } from '../../components/plan/LoadPlanView';
+import { ConsultStatusTag } from '../../components/ConsultStatusTag';
+import { TextInput, btnPrimary, btnSmall } from '../../components/ui/Field';
 import { Avatar, PageHeader, Panel, StatCard, Tag } from './widgets';
 
-const UPCOMING = [
-  { mentee: 'Maya R.', subject: 'AP Calculus BC', when: 'Today · 4:30 PM', mode: 'Video' },
-  { mentee: 'Jordan L.', subject: 'Physics C: Mechanics', when: 'Wed · 5:15 PM', mode: 'Video' },
-];
-
-const MENTEES = [
-  { name: 'Maya R.', headline: '11th grade · IB Diploma', subjects: ['AP Calculus BC'] },
-  { name: 'Jordan L.', headline: '12th grade · AP track', subjects: ['Physics C', 'Calculus'] },
-  { name: 'Sana P.', headline: '10th grade', subjects: ['Pre-calculus'] },
-];
-
-const REQUESTS = [
-  { name: 'Ethan W.', headline: '11th grade · AP track', subject: 'AP Calculus BC' },
-  { name: 'Nora B.', headline: '12th grade', subject: 'College math placement' },
-];
+function StudentPlan({ studentId }: { studentId: string }) {
+  const student = findUserById(studentId);
+  if (!student) return null;
+  const state = getStudentState(student);
+  if (state.indiaPlan) return <IndiaPlanView user={student} plan={state.indiaPlan} audience="mentor" />;
+  if (state.loadPlan) return <LoadPlanView user={student} plan={state.loadPlan} hollandCode={state.profile!.hollandCode} audience="mentor" />;
+  return <p className="text-[12.5px] text-slate-500">This student has no plan yet.</p>;
+}
 
 export function MentorDashboard({ user }: { user: User }) {
   const firstName = user.name.split(' ')[0];
+  const [, force] = useState(0);
+  const refresh = () => force((n) => n + 1);
+  const [openPlan, setOpenPlan] = useState<string | null>(null);
+  const [notes, setNotes] = useState<Record<string, string>>({});
+
+  const app = getMentorApplication(user.id);
+  const vetted = isVetted(app);
+  const passed = Object.values(app.stages).filter((s) => s === 'passed').length;
+
+  const mine = listConsults((c) => c.mentorId === user.id);
+  // Phase 1: the team matches by hand; vetted mentors in the segment can pick up unmatched requests.
+  const open = vetted
+    ? listConsults((c) => c.mentorId === null && c.status === 'requested' && findUserById(c.studentId)?.segment === user.segment)
+    : [];
+  const requests = mine.filter((c) => c.status === 'requested');
+  const active = mine.filter((c) => c.status === 'accepted');
+  const completed = mine.filter((c) => c.status === 'completed');
+
+  function set(c: Consult, patch: Partial<Consult>) {
+    saveConsult({ ...c, ...patch });
+    refresh();
+  }
+
+  function complete(c: Consult) {
+    const note = notes[c.id]?.trim() ?? '';
+    set(c, { status: 'completed', mentorNote: note || undefined });
+    // Mentor-side outcome log feeds the loop (M6) alongside the student's own report.
+    saveOutcome({
+      id: makeId('o'),
+      studentId: c.studentId,
+      reporter: 'mentor',
+      subject: c.topic,
+      examSession: 'Consult',
+      predictedHoursPerWeek: null,
+      actualHoursPerWeek: 0,
+      score: '',
+      notes: note,
+      consentToResearch: false,
+      createdAt: new Date().toISOString(),
+    });
+  }
+
+  if (!vetted) {
+    return (
+      <>
+        <PageHeader
+          eyebrow="Mentor workspace"
+          title={`Welcome, ${firstName}`}
+          subtitle="You'll receive student matches once vetting is complete."
+        />
+        <Panel title="Vetting progress">
+          <p className="text-[14px] text-ink"><span className="font-semibold">{passed} of 4</span> stages passed</p>
+          <div className="h-1.5 bg-line rounded-full mt-2 mb-4 overflow-hidden">
+            <div className="h-full bg-bronze-500" style={{ width: `${(passed / 4) * 100}%` }} />
+          </div>
+          <p className="text-[13px] text-slate-600 mb-4">
+            Application → subject screen → teaching demo → safeguarding checks. Every stage is required before any
+            contact with a student.
+          </p>
+          <Link to="/mentor/application" className={btnPrimary}>Continue application</Link>
+        </Panel>
+      </>
+    );
+  }
+
+  const renderConsult = (c: Consult, actions: React.ReactNode) => (
+    <li key={c.id} className="border border-line-2 rounded-sm p-3">
+      <div className="flex items-start gap-3">
+        <Avatar name={c.studentName} />
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <p className="text-[13.5px] font-medium text-ink">{c.studentName}</p>
+            <Tag>{c.kind === 'free' ? 'Free 20-min' : 'Paid'}</Tag>
+            <ConsultStatusTag status={c.status} />
+          </div>
+          <p className="text-[12.5px] text-slate-600 mt-0.5">{c.topic}</p>
+          {c.preferredTimes && <p className="text-[11.5px] text-slate-500">Prefers: {c.preferredTimes}</p>}
+          <button onClick={() => setOpenPlan(openPlan === c.id ? null : c.id)} className="text-[12px] text-bronze-600 mt-1">
+            {openPlan === c.id ? 'Hide plan' : 'View student plan'}
+          </button>
+        </div>
+      </div>
+      {openPlan === c.id && <div className="mt-3"><StudentPlan studentId={c.studentId} /></div>}
+      <div className="mt-3">{actions}</div>
+    </li>
+  );
 
   return (
     <>
       <PageHeader
         eyebrow="Mentor workspace"
         title={`Welcome back, ${firstName}`}
-        subtitle="Your mentees and upcoming sessions at a glance."
-        action={
-          <button className="inline-flex items-center gap-2 bg-ink text-paper text-[13px] font-medium px-4 py-2.5 rounded-sm hover:bg-ink-soft transition-colors">
-            <span className="material-symbols-outlined text-[18px]">calendar_add_on</span>
-            Set availability
-          </button>
-        }
+        subtitle="Consult requests matched from student plans. All sessions stay on-platform."
       />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <StatCard value="3" label="Active mentees" icon="groups" />
-        <StatCard value="2" label="Pending requests" icon="inbox" />
-        <StatCard value="58" label="Sessions delivered" icon="task_alt" />
-        <StatCard value="4.9" label="Avg. rating" icon="star" />
+        <StatCard value={String(requests.length + open.length)} label="Open requests" icon="inbox" />
+        <StatCard value={String(active.length)} label="Accepted" icon="event_available" />
+        <StatCard value={String(completed.length)} label="Consults delivered" icon="task_alt" />
+        <StatCard value={user.athleteMentor ? 'Yes' : 'No'} label="Athlete-mentor" icon="sprint" />
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          <Panel
-            title="Upcoming sessions"
-            action={<a className="text-[12.5px] font-medium text-bronze-600 hover:text-bronze-700 cursor-pointer">View all</a>}
-          >
-            <ul className="divide-y divide-line">
-              {UPCOMING.map((s) => (
-                <li key={s.subject} className="flex items-center gap-4 py-3 first:pt-0 last:pb-0">
-                  <Avatar name={s.mentee} />
-                  <div className="min-w-0 flex-1">
-                    <p className="text-[14px] font-medium text-ink">{s.subject}</p>
-                    <p className="text-[12px] text-slate-500">with {s.mentee} · {s.when}</p>
-                  </div>
-                  <Tag>{s.mode}</Tag>
-                  <button className="text-[12.5px] font-medium text-ink border border-line-2 rounded-sm px-3 py-1.5 hover:bg-line/50 transition-colors">
-                    Start
-                  </button>
-                </li>
-              ))}
-            </ul>
+          <Panel title="Requests for you">
+            {requests.length + open.length === 0 ? (
+              <p className="text-[13px] text-slate-500">No requests right now. You'll see new matches here.</p>
+            ) : (
+              <ul className="space-y-3">
+                {requests.map((c) =>
+                  renderConsult(
+                    c,
+                    <div className="flex gap-2">
+                      <button onClick={() => set(c, { status: 'accepted' })} className="text-[12px] font-medium text-paper bg-ink rounded-sm px-3 py-1.5">Accept</button>
+                      <button onClick={() => set(c, { status: 'declined' })} className={btnSmall}>Decline</button>
+                    </div>,
+                  ),
+                )}
+                {open.map((c) =>
+                  renderConsult(
+                    c,
+                    <button onClick={() => set(c, { mentorId: user.id, mentorName: user.name, status: 'accepted' })} className={btnSmall}>
+                      Take this request (team-matched)
+                    </button>,
+                  ),
+                )}
+              </ul>
+            )}
           </Panel>
 
-          <Panel title="Your mentees">
-            <ul className="space-y-4">
-              {MENTEES.map((m) => (
-                <li key={m.name} className="flex items-start gap-4">
-                  <Avatar name={m.name} />
-                  <div className="flex-1">
-                    <p className="text-[14px] font-medium text-ink">{m.name}</p>
-                    <p className="text-[12px] text-slate-500">{m.headline}</p>
-                    <div className="flex flex-wrap gap-1.5 mt-2">
-                      {m.subjects.map((s) => <Tag key={s}>{s}</Tag>)}
-                    </div>
-                  </div>
-                  <button className="text-[12.5px] font-medium text-bronze-600 hover:text-bronze-700">
-                    Message
-                  </button>
-                </li>
-              ))}
-            </ul>
+          <Panel title="Accepted consults">
+            {active.length === 0 ? (
+              <p className="text-[13px] text-slate-500">Nothing scheduled.</p>
+            ) : (
+              <ul className="space-y-3">
+                {active.map((c) =>
+                  renderConsult(
+                    c,
+                    <div className="flex flex-wrap gap-2 items-center">
+                      <div className="flex-1 min-w-[200px]">
+                        <TextInput
+                          placeholder="Session note / what you advised"
+                          value={notes[c.id] ?? ''}
+                          onChange={(e) => setNotes({ ...notes, [c.id]: e.target.value })}
+                        />
+                      </div>
+                      <button onClick={() => complete(c)} className="text-[12px] font-medium text-paper bg-ink rounded-sm px-3 py-2">
+                        Mark delivered &amp; log result
+                      </button>
+                    </div>,
+                  ),
+                )}
+              </ul>
+            )}
           </Panel>
         </div>
 
         <div className="space-y-6">
-          <Panel
-            title="Mentee requests"
-            action={<span className="text-[11px] font-medium text-paper bg-bronze-500 rounded-full px-2 py-0.5">{REQUESTS.length} new</span>}
-          >
-            <ul className="space-y-4">
-              {REQUESTS.map((r) => (
-                <li key={r.name} className="border border-line-2 rounded-sm p-3">
-                  <div className="flex items-center gap-3">
-                    <Avatar name={r.name} />
-                    <div className="min-w-0">
-                      <p className="text-[13.5px] font-medium text-ink">{r.name}</p>
-                      <p className="text-[11.5px] text-slate-500">{r.headline}</p>
-                    </div>
-                  </div>
-                  <p className="text-[12px] text-slate-600 mt-2">Wants help with <span className="text-ink font-medium">{r.subject}</span></p>
-                  <div className="flex gap-2 mt-3">
-                    <button className="flex-1 text-[12px] font-medium text-paper bg-ink rounded-sm py-1.5 hover:bg-ink-soft transition-colors">
-                      Accept
-                    </button>
-                    <button className="flex-1 text-[12px] font-medium text-slate-600 border border-line-2 rounded-sm py-1.5 hover:bg-line/50 transition-colors">
-                      Decline
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </Panel>
-
           <Panel title="Subjects you mentor">
             <div className="flex flex-wrap gap-1.5">
-              {(user.subjects.length ? user.subjects : ['Add subjects to your profile']).map((s) => (
+              {(user.subjects.length ? user.subjects : ['Add subjects in your application']).map((s) => (
                 <Tag key={s}>{s}</Tag>
               ))}
             </div>
+          </Panel>
+          <Panel title="Payouts">
+            <p className="text-[13px] text-slate-600 leading-relaxed">
+              Proposed model: you set your own rate ($28–$45/hr) after onboarding, with a monthly stipend. Payouts
+              aren't live in the prototype.
+            </p>
           </Panel>
         </div>
       </div>

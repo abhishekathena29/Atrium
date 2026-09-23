@@ -1,19 +1,38 @@
+import { Link } from 'react-router-dom';
+
 const columns = [
   {
-    title: 'Subjects',
-    items: ['Mathematics', 'Sciences', 'Humanities', 'Computer Science', 'Languages', 'Economics'],
+    title: 'Plans',
+    items: [
+      { label: 'AP plan · India', to: '/india' },
+      { label: 'Course load · SG / US', to: '/sg-us' },
+      { label: 'Student-athletes', to: '/sg-us#athletes' },
+      { label: 'Free consult', to: '/signup?role=student' },
+    ],
   },
   {
-    title: 'Programs',
-    items: ['Course selection', 'AP & IB prep', 'College planning', 'Semester roadmaps'],
+    title: 'People',
+    items: [
+      { label: 'For students', to: '/#mentees' },
+      { label: 'For parents', to: '/signup?role=parent' },
+      { label: 'For mentors', to: '/#mentors' },
+      { label: 'Apply to mentor', to: '/signup?role=mentor' },
+    ],
   },
   {
-    title: 'Company',
-    items: ['About', 'Mentor standards', 'Press', 'Contact'],
+    title: 'Trust',
+    items: [
+      { label: 'Methodology', to: '/methodology' },
+      { label: 'Safeguarding', to: '/safeguarding' },
+      { label: 'Report a concern', to: '/safeguarding#report' },
+    ],
   },
   {
-    title: 'Resources',
-    items: ['Free consult', 'Course guides', 'Help center', 'Mentor login'],
+    title: 'Account',
+    items: [
+      { label: 'Sign in', to: '/signin' },
+      { label: 'Create account', to: '/signup' },
+    ],
   },
 ];
 
@@ -24,30 +43,15 @@ export function Footer() {
         <div className="grid lg:grid-cols-12 gap-12 pb-16 border-b border-slate-700">
           <div className="lg:col-span-4">
             <div className="flex items-center gap-2 mb-6">
-              <span className="w-7 h-7 rounded-sm bg-paper flex items-center justify-center">
-                <span className="font-serif text-ink text-[15px] leading-none mt-[2px]">A</span>
+              <span className="w-8 h-8 rounded-xl bg-leaf-600 flex items-center justify-center">
+                <span className="material-symbols-outlined text-white text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>school</span>
               </span>
-              <span className="font-serif text-paper text-[22px] tracking-tight">Atrium</span>
+              <span className="font-jakarta font-extrabold text-paper text-[22px] tracking-tight">Atrium</span>
             </div>
             <p className="text-[14px] text-slate-300 leading-relaxed max-w-sm">
-              Academic mentorship for students choosing their courses and the
-              mentors who guide them. Built on lived experience, not generic
-              tutoring.
+              AP and course-load selection for students in India and on the Singapore / US track. A free plan
+              first, then a vetted mentor to check it.
             </p>
-
-            <div className="mt-8">
-              <p className="eyebrow text-slate-400 mb-3">Newsletter</p>
-              <form className="flex border border-slate-700 rounded-sm overflow-hidden max-w-sm">
-                <input
-                  type="email"
-                  placeholder="you@school.edu"
-                  className="flex-1 bg-transparent text-[13.5px] text-paper placeholder:text-slate-500 px-4 py-3 focus:outline-none"
-                />
-                <button className="bg-paper text-ink text-[13px] font-medium px-5 hover:bg-paper-2 transition-colors">
-                  Subscribe
-                </button>
-              </form>
-            </div>
           </div>
 
           <div className="lg:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -56,13 +60,10 @@ export function Footer() {
                 <p className="eyebrow text-slate-400 mb-4">{c.title}</p>
                 <ul className="space-y-2.5">
                   {c.items.map((i) => (
-                    <li key={i}>
-                      <a
-                        href="#"
-                        className="text-[13.5px] text-slate-300 hover:text-paper transition-colors"
-                      >
-                        {i}
-                      </a>
+                    <li key={i.label}>
+                      <Link to={i.to} className="text-[13.5px] text-slate-300 hover:text-paper transition-colors">
+                        {i.label}
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -73,21 +74,15 @@ export function Footer() {
 
         <div className="pt-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <p className="text-[12px] text-slate-400">
-            © {new Date().getFullYear()} Atrium Academic Inc. All rights reserved.
+            © {new Date().getFullYear()} Atrium · Athena Education. Guidance only, not a score guarantee.
           </p>
           <div className="flex flex-wrap gap-x-6 gap-y-2">
-            <a href="#" className="text-[12px] text-slate-400 hover:text-paper transition-colors">
-              Privacy
-            </a>
-            <a href="#" className="text-[12px] text-slate-400 hover:text-paper transition-colors">
-              Terms
-            </a>
-            <a href="#" className="text-[12px] text-slate-400 hover:text-paper transition-colors">
+            <Link to="/methodology" className="text-[12px] text-slate-400 hover:text-paper transition-colors">
+              Methodology
+            </Link>
+            <Link to="/safeguarding" className="text-[12px] text-slate-400 hover:text-paper transition-colors">
               Safeguarding
-            </a>
-            <a href="#" className="text-[12px] text-slate-400 hover:text-paper transition-colors">
-              Accessibility
-            </a>
+            </Link>
           </div>
         </div>
       </div>

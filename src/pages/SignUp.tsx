@@ -1,55 +1,38 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
-import type { UserRole } from '../auth/types';
+import type { Segment, UserRole } from '../auth/types';
 import { AuthLayout } from '../components/auth/AuthLayout';
-import { Field, TextInput } from '../components/ui/Field';
+import { ErrorNote, Field, TextInput } from '../components/ui/Field';
 
-const ROLES: {
-  value: UserRole;
-  title: string;
-  blurb: string;
-  icon: string;
-  headlineLabel: string;
-  headlinePlaceholder: string;
-  subjectsLabel: string;
-}[] = [
-  {
-    value: 'student',
-    title: "I'm a student",
-    blurb: 'Get matched with a peer mentor who has aced your coursework.',
-    icon: 'school',
-    headlineLabel: 'Grade / year',
-    headlinePlaceholder: 'e.g. 11th grade · IB Diploma',
-    subjectsLabel: 'Subjects you want help with',
-  },
-  {
-    value: 'mentor',
-    title: "I'm a mentor",
-    blurb: 'Guide younger students through the coursework you’ve already mastered.',
-    icon: 'volunteer_activism',
-    headlineLabel: 'University & class year',
-    headlinePlaceholder: "e.g. MIT '26 · Mechanical Engineering",
-    subjectsLabel: 'Subjects you can mentor in',
-  },
+const ROLES: { value: UserRole; title: string; blurb: string; icon: string }[] = [
+  { value: 'student', title: "I'm a student", blurb: 'Get a free plan, then validate it with a mentor.', icon: 'school' },
+  { value: 'parent', title: "I'm a parent", blurb: "View your child's plan and approve consults.", icon: 'family_restroom' },
+  { value: 'mentor', title: "I'm a mentor", blurb: 'Apply to guide students through courses you recently took.', icon: 'volunteer_activism' },
 ];
+
+const SEGMENTS: { value: Segment; title: string; blurb: string }[] = [
+  { value: 'india', title: 'India', blurb: 'AP self-study for US applications' },
+  { value: 'sgus', title: 'Singapore · US track', blurb: 'IB / A-Level / AP course load, incl. athletes' },
+];
+
+function roleParam(v: string | null): UserRole {
+  return v === 'mentor' || v === 'parent' ? v : 'student';
+}
 
 export function SignUp() {
   const { signUp } = useAuth();
   const navigate = useNavigate();
   const [params] = useSearchParams();
 
-  const initialRole = params.get('role') === 'mentor' ? 'mentor' : 'student';
-  const [role, setRole] = useState<UserRole>(initialRole);
+  const [role, setRole] = useState<UserRole>(roleParam(params.get('role')));
+  const [segment, setSegment] = useState<Segment>(params.get('segment') === 'sgus' ? 'sgus' : 'india');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [headline, setHeadline] = useState('');
-  const [subjects, setSubjects] = useState('');
+  const [inviteCode, setInviteCode] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
-
-  const config = ROLES.find((r) => r.value === role)!;
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -61,13 +44,12 @@ export function SignUp() {
         email,
         password,
         role,
-        headline,
-        subjects: subjects
-          .split(',')
-          .map((s) => s.trim())
-          .filter(Boolean),
+        segment,
+        headline: role === 'parent' ? 'Parent / guardian' : '',
+        subjects: [],
+        parentInviteCode: role === 'parent' ? inviteCode : undefined,
       });
-      navigate('/dashboard');
+      navigate(role === 'student' ? '/onboarding' : role === 'mentor' ? '/mentor/application' : '/dashboard');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to create account.');
     } finally {
@@ -78,18 +60,17 @@ export function SignUp() {
   return (
     <AuthLayout
       aside={{
-        quote: 'Atrium mentors don’t lecture — they remember exactly what it felt like to sit where you are.',
-        attribution: 'From the Atrium mentor handbook',
+        quote: 'Start with a free plan. Talk to a mentor only once you know what you want to ask.',
+        attribution: 'How Atrium works',
         image:
           'https://images.unsplash.com/photo-1606761568499-6d2451b23c66?auto=format&fit=crop&w=1200&q=80',
       }}
     >
       <span className="eyebrow text-bronze-600">Join Atrium</span>
       <h1 className="font-serif text-ink text-display-md mt-3">Create your account</h1>
-      <p className="text-[14px] text-slate-500 mt-2">First, tell us how you’ll use Atrium.</p>
+      <p className="text-[14px] text-slate-500 mt-2">First, tell us how you'll use Atrium.</p>
 
-      {/* Role selector */}
-      <div className="mt-6 grid sm:grid-cols-2 gap-3">
+      <div className="mt-6 grid sm:grid-cols-3 gap-3">
         {ROLES.map((r) => {
           const active = r.value === role;
           return (
@@ -98,53 +79,53 @@ export function SignUp() {
               type="button"
               onClick={() => setRole(r.value)}
               className={
-                'text-left rounded-md border p-4 transition-colors ' +
+                'text-left rounded-md border p-3.5 transition-colors ' +
                 (active
                   ? 'border-bronze-400 bg-accent-soft/60 ring-1 ring-bronze-300'
                   : 'border-line-2 bg-canvas hover:border-bronze-300')
               }
             >
-              <span
-                className={
-                  'material-symbols-outlined text-[22px] ' +
-                  (active ? 'text-bronze-600' : 'text-slate-400')
-                }
-              >
+              <span className={'material-symbols-outlined text-[22px] ' + (active ? 'text-bronze-600' : 'text-slate-400')}>
                 {r.icon}
               </span>
-              <p className="font-serif text-ink text-[17px] mt-2">{r.title}</p>
-              <p className="text-[12px] text-slate-500 mt-1 leading-snug">{r.blurb}</p>
+              <p className="font-serif text-ink text-[16px] mt-1.5">{r.title}</p>
+              <p className="text-[11.5px] text-slate-500 mt-1 leading-snug">{r.blurb}</p>
             </button>
           );
         })}
       </div>
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-        {error && (
-          <div className="text-[13px] text-red-700 bg-red-50 border border-red-200 rounded-sm px-3 py-2">
-            {error}
+        {error && <ErrorNote>{error}</ErrorNote>}
+
+        {role !== 'parent' && (
+          <div>
+            <span className="block text-[12px] font-medium text-slate-700 mb-1.5">Track</span>
+            <div className="grid grid-cols-2 gap-2">
+              {SEGMENTS.map((s) => (
+                <button
+                  key={s.value}
+                  type="button"
+                  onClick={() => setSegment(s.value)}
+                  className={
+                    'text-left rounded-sm border px-3 py-2 ' +
+                    (segment === s.value ? 'border-ink bg-canvas ring-1 ring-ink' : 'border-line-2 bg-canvas')
+                  }
+                >
+                  <p className="text-[13px] font-medium text-ink">{s.title}</p>
+                  <p className="text-[11px] text-slate-500">{s.blurb}</p>
+                </button>
+              ))}
+            </div>
           </div>
         )}
 
         <Field label="Full name">
-          <TextInput
-            required
-            autoComplete="name"
-            placeholder="Jordan Lee"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+          <TextInput required autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} />
         </Field>
 
         <Field label="Email">
-          <TextInput
-            type="email"
-            required
-            autoComplete="email"
-            placeholder="you@school.edu"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          <TextInput type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
         </Field>
 
         <Field label="Password" hint="At least 6 characters.">
@@ -159,29 +140,30 @@ export function SignUp() {
           />
         </Field>
 
-        <Field label={config.headlineLabel}>
-          <TextInput
-            required
-            placeholder={config.headlinePlaceholder}
-            value={headline}
-            onChange={(e) => setHeadline(e.target.value)}
-          />
-        </Field>
+        {role === 'parent' && (
+          <Field label="Student invite code" hint="Shown on your child's Atrium dashboard.">
+            <TextInput
+              required
+              value={inviteCode}
+              onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
+              placeholder="e.g. K7Q2XM"
+            />
+          </Field>
+        )}
 
-        <Field label={config.subjectsLabel} hint="Comma-separated, e.g. AP Calculus BC, Physics C">
-          <TextInput
-            placeholder="AP Calculus BC, Chemistry, College essays"
-            value={subjects}
-            onChange={(e) => setSubjects(e.target.value)}
-          />
-        </Field>
+        {role === 'mentor' && (
+          <p className="text-[12px] text-slate-500 leading-relaxed">
+            Next you'll complete a four-stage vetting: application, subject screen, teaching demo, and safeguarding
+            checks. You're only matched with students after all four.
+          </p>
+        )}
 
         <button
           type="submit"
           disabled={submitting}
           className="w-full inline-flex items-center justify-center gap-2 bg-ink text-paper text-[14px] font-medium px-6 py-3 rounded-sm hover:bg-ink-soft transition-colors disabled:opacity-60"
         >
-          {submitting ? 'Creating account…' : `Create ${role} account`}
+          {submitting ? 'Creating account…' : role === 'mentor' ? 'Create account & apply' : `Create ${role} account`}
           <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
         </button>
       </form>

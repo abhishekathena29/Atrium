@@ -4,12 +4,13 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Atrium — Academic Mentorship for Course Selection & College Prep</title>
+    <title>Atrium — AP & Course-Load Selection with Mentor Validation</title>
+    <meta name="description" content="A free, reasoned plan for which APs to self-study (India) or which course load to take (Singapore · US track), validated by a vetted mentor." />
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <link
@@ -49,6 +50,18 @@
                 600: '#875A24',
                 700: '#65431D',
               },
+              leaf: {
+                50: '#F1F8EF',
+                100: '#DDEFD8',
+                200: '#BCDFB2',
+                300: '#8FC784',
+                400: '#62AB57',
+                500: '#3F8F3A',
+                600: '#2F7430',
+                700: '#275C29',
+                800: '#214A24',
+                900: '#1B3D1F',
+              },
               accent: '#A8722E',
               'accent-soft': '#F2E3CB',
               line: '#E2DED4',
@@ -58,6 +71,7 @@
               serif: ['Fraunces', 'Georgia', 'serif'],
               sans: ['Inter', 'system-ui', 'sans-serif'],
               display: ['Fraunces', 'Georgia', 'serif'],
+              jakarta: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
             },
             fontSize: {
               'display-2xl': ['72px', { lineHeight: '1.05', letterSpacing: '-0.02em', fontWeight: '500' }],

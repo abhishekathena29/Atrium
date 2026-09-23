@@ -29,8 +29,8 @@ export function SignIn() {
   return (
     <AuthLayout
       aside={{
-        quote: 'My mentor had already aced the exact AP load I was terrified of. That changed everything.',
-        attribution: 'Maya R. · Junior, mentored since 2024',
+        quote: 'Pick the APs and courses that cost you the least and count the most.',
+        attribution: 'What Atrium is for',
         image:
           'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80',
       }}
@@ -38,7 +38,7 @@ export function SignIn() {
       <span className="eyebrow text-bronze-600">Welcome back</span>
       <h1 className="font-serif text-ink text-display-md mt-3">Sign in to Atrium</h1>
       <p className="text-[14px] text-slate-500 mt-2">
-        Pick up where you left off with your mentors and sessions.
+        Pick up your plan, questionnaire, and consults where you left off.
       </p>
 
       <form onSubmit={handleSubmit} className="mt-8 space-y-4">

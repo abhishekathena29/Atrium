@@ -1,34 +1,35 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
-import type { UserRole } from '../../auth/types';
+import { SEGMENT_LABEL, type UserRole } from '../../auth/types';
 
 interface NavItem {
   label: string;
   icon: string;
+  to: string;
 }
 
 const NAV: Record<UserRole, NavItem[]> = {
   student: [
-    { label: 'Overview', icon: 'dashboard' },
-    { label: 'My mentors', icon: 'groups' },
-    { label: 'Sessions', icon: 'calendar_month' },
-    { label: 'Find a mentor', icon: 'search' },
-    { label: 'Messages', icon: 'forum' },
+    { label: 'Overview', icon: 'dashboard', to: '/dashboard' },
+    { label: 'Profile & intake', icon: 'badge', to: '/onboarding' },
+    { label: 'Questionnaire', icon: 'psychology', to: '/questionnaire' },
+    { label: 'My plan', icon: 'route', to: '/plan' },
+    { label: 'Progress & awards', icon: 'emoji_events', to: '/progress' },
+    { label: 'Consults', icon: 'calendar_month', to: '/consults' },
+    { label: 'Report outcome', icon: 'fact_check', to: '/outcomes' },
   ],
+  parent: [{ label: 'Overview', icon: 'dashboard', to: '/dashboard' }],
   mentor: [
-    { label: 'Overview', icon: 'dashboard' },
-    { label: 'My mentees', icon: 'groups' },
-    { label: 'Sessions', icon: 'calendar_month' },
-    { label: 'Requests', icon: 'inbox' },
-    { label: 'Messages', icon: 'forum' },
+    { label: 'Overview', icon: 'dashboard', to: '/dashboard' },
+    { label: 'Application & vetting', icon: 'verified_user', to: '/mentor/application' },
   ],
 };
+
+const ROLE_LABEL: Record<UserRole, string> = { student: 'Student', parent: 'Parent', mentor: 'Mentor' };
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
-  const [active, setActive] = useState('Overview');
 
   if (!user) return null;
   const items = NAV[user.role];
@@ -37,6 +38,10 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
     signOut();
     navigate('/');
   }
+
+  const linkClass = ({ isActive }: { isActive: boolean }) =>
+    'flex items-center gap-3 px-3 py-2 rounded-sm text-[13.5px] font-medium transition-colors ' +
+    (isActive ? 'bg-ink text-paper' : 'text-slate-600 hover:bg-line/60 hover:text-ink');
 
   return (
     <div className="min-h-screen bg-paper text-ink flex">
@@ -49,30 +54,22 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
           <span className="font-serif text-ink text-[20px] tracking-tight">Atrium</span>
         </Link>
 
-        <span className="eyebrow text-slate-400 mb-3 px-2">
-          {user.role === 'mentor' ? 'Mentor' : 'Student'} workspace
-        </span>
+        <span className="eyebrow text-slate-400 mb-1 px-2">{ROLE_LABEL[user.role]} workspace</span>
+        <span className="text-[11.5px] text-slate-500 mb-3 px-2">{SEGMENT_LABEL[user.segment]}</span>
 
         <nav className="flex flex-col gap-1">
-          {items.map((item) => {
-            const isActive = item.label === active;
-            return (
-              <button
-                key={item.label}
-                onClick={() => setActive(item.label)}
-                className={
-                  'flex items-center gap-3 px-3 py-2 rounded-sm text-[13.5px] font-medium transition-colors text-left ' +
-                  (isActive
-                    ? 'bg-ink text-paper'
-                    : 'text-slate-600 hover:bg-line/60 hover:text-ink')
-                }
-              >
-                <span className="material-symbols-outlined text-[19px]">{item.icon}</span>
-                {item.label}
-              </button>
-            );
-          })}
+          {items.map((item) => (
+            <NavLink key={item.to} to={item.to} end className={linkClass}>
+              <span className="material-symbols-outlined text-[19px]">{item.icon}</span>
+              {item.label}
+            </NavLink>
+          ))}
         </nav>
+
+        <div className="mt-6 flex flex-col gap-1 text-[12.5px] px-3">
+          <Link to="/safeguarding" className="text-slate-500 hover:text-ink">Safeguarding &amp; report a concern</Link>
+          <Link to="/methodology" className="text-slate-500 hover:text-ink">Methodology</Link>
+        </div>
 
         <div className="mt-auto pt-5 border-t border-line">
           <div className="flex items-center gap-3 px-1">
@@ -98,14 +95,33 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 
       {/* Main column */}
       <div className="flex-1 min-w-0 flex flex-col">
-        {/* Mobile top bar */}
-        <header className="md:hidden flex items-center justify-between border-b border-line px-5 h-14 bg-paper/90 backdrop-blur-md sticky top-0 z-40">
-          <Link to="/" className="font-serif text-[18px]">Atrium</Link>
-          <button onClick={handleSignOut} className="text-[12.5px] font-medium text-slate-600">
-            Sign out
-          </button>
+        {/* Mobile top bar + nav */}
+        <header className="md:hidden border-b border-line bg-paper/90 backdrop-blur-md sticky top-0 z-40">
+          <div className="flex items-center justify-between px-5 h-14">
+            <Link to="/" className="font-serif text-[18px]">Atrium</Link>
+            <button onClick={handleSignOut} className="text-[12.5px] font-medium text-slate-600">
+              Sign out
+            </button>
+          </div>
+          {items.length > 1 && (
+            <nav className="flex gap-1 overflow-x-auto px-3 pb-2">
+              {items.map((item) => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  end
+                  className={({ isActive }) =>
+                    'shrink-0 text-[12.5px] font-medium px-3 py-1.5 rounded-sm ' +
+                    (isActive ? 'bg-ink text-paper' : 'text-slate-600')
+                  }
+                >
+                  {item.label}
+                </NavLink>
+              ))}
+            </nav>
+          )}
         </header>
-        <main className="flex-1 px-5 sm:px-8 lg:px-12 py-8 lg:py-10">{children}</main>
+        <main className="flex-1 px-5 sm:px-8 lg:px-12 py-8 lg:py-10 max-w-6xl w-full">{children}</main>
       </div>
     </div>
   );

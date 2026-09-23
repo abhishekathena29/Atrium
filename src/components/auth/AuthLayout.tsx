@@ -27,7 +27,7 @@ export function AuthLayout({
         </div>
 
         <p className="text-[12px] text-slate-400 text-center">
-          © {new Date().getFullYear()} Atrium · Academic mentorship
+          © {new Date().getFullYear()} Atrium · Athena Education
         </p>
       </div>
 

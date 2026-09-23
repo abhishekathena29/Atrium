@@ -1,8 +1,14 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import type { ReactNode } from 'react';
 import { useAuth } from '../auth/AuthContext';
+import type { UserRole } from '../auth/types';
+import { DashboardLayout } from '../pages/dashboard/DashboardLayout';
 
-export function ProtectedRoute({ children }: { children: ReactNode }) {
+/**
+ * Requires a signed-in user and, optionally, one of `roles` (enforces the blueprint's
+ * access matrix). Renders inside the dashboard shell.
+ */
+export function ProtectedRoute({ children, roles }: { children: ReactNode; roles?: UserRole[] }) {
   const { user, loading } = useAuth();
   const location = useLocation();
 
@@ -18,5 +24,9 @@ export function ProtectedRoute({ children }: { children: ReactNode }) {
     return <Navigate to="/signin" replace state={{ from: location.pathname }} />;
   }
 
-  return <>{children}</>;
+  if (roles && !roles.includes(user.role)) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return <DashboardLayout>{children}</DashboardLayout>;
 }
