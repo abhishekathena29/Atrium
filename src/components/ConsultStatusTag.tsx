@@ -4,7 +4,7 @@ const LABEL: Record<ConsultStatus, [string, string]> = {
   awaiting_parent: ['Awaiting parent', 'bg-amber-50 text-amber-800 border-amber-200'],
   requested: ['Requested', 'bg-slate-100 text-slate-700 border-line-2'],
   accepted: ['Accepted', 'bg-emerald-50 text-emerald-800 border-emerald-200'],
-  completed: ['Completed', 'bg-ink text-paper border-ink'],
+  completed: ['Completed', 'bg-leaf-600 text-white border-leaf-600'],
   declined: ['Declined', 'bg-red-50 text-red-700 border-red-200'],
   cancelled: ['Cancelled', 'bg-slate-100 text-slate-500 border-line-2'],
 };

@@ -9,7 +9,7 @@ export function SgUsLanding() {
 
   return (
     <PublicLayout>
-      <PageIntro eyebrow="Singapore · US track · IB, A-Level, AP" title={<>A course load <span className="italic text-bronze-600">your week</span> can actually survive.</>}>
+      <PageIntro eyebrow="Singapore · US track · IB, A-Level, AP" title={<>A course load <span className="text-leaf-600">your week</span> can actually survive.</>}>
         Choose subjects and levels that fit where you're aiming and how you're wired, under a weekly ceiling
         built from the hours you really have.
       </PageIntro>
@@ -17,8 +17,8 @@ export function SgUsLanding() {
       <section id="athletes" className="border-b border-line">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 py-20 grid lg:grid-cols-12 gap-12">
           <div className="lg:col-span-5">
-            <p className="eyebrow text-bronze-600 mb-4">Flagship: student-athletes</p>
-            <h2 className="font-serif text-ink text-display-md leading-tight">
+            <p className="eyebrow text-leaf-600 mb-4">Flagship: student-athletes</p>
+            <h2 className="font-jakarta font-bold text-ink text-[30px] leading-tight">
               Training hours set the ceiling. Your targets set the priorities.
             </h2>
             <ul className="mt-8 space-y-5 text-[14.5px] text-slate-600 leading-relaxed">
@@ -30,7 +30,7 @@ export function SgUsLanding() {
             </ul>
             <Link
               to="/signup?role=student&segment=sgus"
-              className="mt-10 inline-flex items-center gap-2 bg-ink text-paper text-[14px] font-medium px-6 py-3.5 rounded-sm hover:bg-ink-soft transition-colors"
+              className="mt-10 inline-flex items-center gap-2 bg-leaf-600 text-white text-[14px] font-medium px-6 py-3.5 rounded-full hover:bg-leaf-700 transition-colors"
             >
               Get your free load plan
               <span className="material-symbols-outlined text-[18px]">arrow_forward</span>

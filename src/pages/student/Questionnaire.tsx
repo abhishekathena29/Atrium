@@ -119,20 +119,20 @@ export function Questionnaire() {
     if (user!.india) updateUser({ india: { ...user!.india, targetMajors: career.targetMajors, targetColleges: career.targetColleges } });
     if (user!.sgus) updateUser({ sgus: { ...user!.sgus, targetMajors: career.targetMajors, targetColleges: career.targetColleges } });
     update({ completedAt: new Date().toISOString(), career });
-    navigate('/plan');
+    navigate('/plan?welcome=1');
   }
 
   return (
     <>
       <PageHeader
-        eyebrow={`Step 2 of 3 · Questionnaire · Layer ${progress.step < 2 ? 1 : progress.step < CAREER_STEP ? 2 : 3} of 3`}
+        eyebrow={`Questionnaire · part ${progress.step < 2 ? 1 : progress.step < CAREER_STEP ? 2 : 3} of 3`}
         title={page ? page.layer : 'Targets & constraints'}
-        subtitle="About 8 minutes. Your answers save as you go, so you can leave and resume."
+        subtitle="About 8 minutes. Answers save as you go, so you can leave anytime and pick up where you stopped."
       />
 
       <div className="max-w-3xl">
         <div className="h-1.5 rounded-full bg-line mb-6 overflow-hidden">
-          <div className="h-full bg-bronze-500 transition-all" style={{ width: `${pct}%` }} />
+          <div className="h-full bg-leaf-500 transition-all" style={{ width: `${pct}%` }} />
         </div>
 
         {error && <div className="mb-4"><ErrorNote>{error}</ErrorNote></div>}
@@ -153,8 +153,8 @@ export function Questionnaire() {
                           type="button"
                           onClick={() => update({ answers: { ...progress.answers, [item.id]: value } })}
                           className={
-                            'text-[11px] leading-tight px-1.5 py-2 rounded-sm border transition-colors ' +
-                            (on ? 'bg-ink text-paper border-ink' : 'bg-canvas text-slate-600 border-line-2 hover:border-bronze-300')
+                            'text-[11px] leading-tight px-1.5 py-2 rounded-xl border transition-colors ' +
+                            (on ? 'bg-leaf-600 text-white border-leaf-600' : 'bg-canvas text-slate-600 border-line-2 hover:border-leaf-300')
                           }
                         >
                           {label}

@@ -31,9 +31,9 @@ export function IndiaPlanView({
 
   if (!plan.mapped) {
     return (
-      <div className="bg-canvas border border-line rounded-md p-6 space-y-4">
-        <span className="eyebrow text-bronze-600">Not mapped yet</span>
-        <h2 className="font-serif text-ink text-display-sm">
+      <div className="bg-canvas border border-line rounded-2xl p-6 space-y-4">
+        <span className="eyebrow text-leaf-600">Not mapped yet</span>
+        <h2 className="font-jakarta font-bold text-ink text-[24px]">
           {intake.board} {intake.stream} is not in the overlap graph yet
         </h2>
         <p className="text-[14px] text-slate-600 leading-relaxed">
@@ -60,9 +60,9 @@ export function IndiaPlanView({
   const boards = plan.boardSubjects.filter((s) => s !== 'English');
 
   return (
-    <div className="bg-paper-2/40 border border-line rounded-md p-5 sm:p-7 space-y-5">
+    <div className="bg-paper-2/40 border border-line rounded-2xl p-5 sm:p-7 space-y-5">
       <div>
-        <h2 className="font-serif text-ink text-[26px] leading-tight">
+        <h2 className="font-jakarta font-bold text-ink text-[26px] leading-tight">
           {audience === 'student' ? 'Which APs are nearly free for you' : `Which APs are nearly free for ${first}`}
         </h2>
         <p className="text-[13px] text-slate-600 mt-2 leading-relaxed">
@@ -73,7 +73,7 @@ export function IndiaPlanView({
       </div>
 
       {audience === 'parent' && (
-        <div className="bg-canvas border border-line rounded-md p-4 text-[13.5px] text-slate-700 leading-relaxed">
+        <div className="bg-canvas border border-line rounded-2xl p-4 text-[13.5px] text-slate-700 leading-relaxed">
           <p className="font-semibold text-ink mb-1">What this means, in plain terms</p>
           An AP is a US college-level exam that students can self-study for and sit in May. {first} is
           already learning much of the content for some APs in their Class {intake.grade} board syllabus, so
@@ -110,7 +110,7 @@ export function IndiaPlanView({
           >
             {audience !== 'parent' && (
               <details className="mt-2 group">
-                <summary className="text-[12px] text-bronze-600 cursor-pointer select-none list-none inline-flex items-center gap-1">
+                <summary className="text-[12px] text-leaf-600 cursor-pointer select-none list-none inline-flex items-center gap-1">
                   <span className="material-symbols-outlined text-[15px] group-open:rotate-90 transition-transform">chevron_right</span>
                   Unit-by-unit overlap
                 </summary>

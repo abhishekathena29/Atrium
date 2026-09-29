@@ -82,7 +82,7 @@ export function MentorDashboard({ user }: { user: User }) {
         <Panel title="Vetting progress">
           <p className="text-[14px] text-ink"><span className="font-semibold">{passed} of 4</span> stages passed</p>
           <div className="h-1.5 bg-line rounded-full mt-2 mb-4 overflow-hidden">
-            <div className="h-full bg-bronze-500" style={{ width: `${(passed / 4) * 100}%` }} />
+            <div className="h-full bg-leaf-500" style={{ width: `${(passed / 4) * 100}%` }} />
           </div>
           <p className="text-[13px] text-slate-600 mb-4">
             Application → subject screen → teaching demo → safeguarding checks. Every stage is required before any
@@ -95,7 +95,7 @@ export function MentorDashboard({ user }: { user: User }) {
   }
 
   const renderConsult = (c: Consult, actions: React.ReactNode) => (
-    <li key={c.id} className="border border-line-2 rounded-sm p-3">
+    <li key={c.id} className="border border-line-2 rounded-xl p-3">
       <div className="flex items-start gap-3">
         <Avatar name={c.studentName} />
         <div className="flex-1 min-w-0">
@@ -106,7 +106,7 @@ export function MentorDashboard({ user }: { user: User }) {
           </div>
           <p className="text-[12.5px] text-slate-600 mt-0.5">{c.topic}</p>
           {c.preferredTimes && <p className="text-[11.5px] text-slate-500">Prefers: {c.preferredTimes}</p>}
-          <button onClick={() => setOpenPlan(openPlan === c.id ? null : c.id)} className="text-[12px] text-bronze-600 mt-1">
+          <button onClick={() => setOpenPlan(openPlan === c.id ? null : c.id)} className="text-[12px] text-leaf-600 mt-1">
             {openPlan === c.id ? 'Hide plan' : 'View student plan'}
           </button>
         </div>
@@ -142,7 +142,7 @@ export function MentorDashboard({ user }: { user: User }) {
                   renderConsult(
                     c,
                     <div className="flex gap-2">
-                      <button onClick={() => set(c, { status: 'accepted' })} className="text-[12px] font-medium text-paper bg-ink rounded-sm px-3 py-1.5">Accept</button>
+                      <button onClick={() => set(c, { status: 'accepted' })} className="text-[12px] font-medium text-white bg-leaf-600 rounded-full px-3.5 py-1.5">Accept</button>
                       <button onClick={() => set(c, { status: 'declined' })} className={btnSmall}>Decline</button>
                     </div>,
                   ),
@@ -175,7 +175,7 @@ export function MentorDashboard({ user }: { user: User }) {
                           onChange={(e) => setNotes({ ...notes, [c.id]: e.target.value })}
                         />
                       </div>
-                      <button onClick={() => complete(c)} className="text-[12px] font-medium text-paper bg-ink rounded-sm px-3 py-2">
+                      <button onClick={() => complete(c)} className="text-[12px] font-medium text-white bg-leaf-600 rounded-xl px-3 py-2">
                         Mark delivered &amp; log result
                       </button>
                     </div>,

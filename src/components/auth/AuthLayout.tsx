@@ -1,47 +1,37 @@
-import { Link } from 'react-router-dom';
 import type { ReactNode } from 'react';
+import { Logo } from '../Logo';
 
-/**
- * Two-column editorial shell shared by Sign in and Sign up: a form panel on the
- * left and a quote / brand panel on the right (hidden on small screens).
- */
-export function AuthLayout({
-  children,
-  aside,
-}: {
-  children: ReactNode;
-  aside: { quote: string; attribution: string; image: string };
-}) {
+const POINTS = [
+  { icon: 'route', text: 'A free plan built from what you already study' },
+  { icon: 'forum', text: 'A free 20-minute consult with a vetted mentor' },
+  { icon: 'local_fire_department', text: 'Streaks and awards to keep self-study going' },
+];
+
+/** Shared shell for sign in / sign up: form on the left, friendly brand panel on the right. */
+export function AuthLayout({ children, title }: { children: ReactNode; title?: string }) {
   return (
     <div className="min-h-screen bg-paper text-ink lg:grid lg:grid-cols-2">
       <div className="flex flex-col px-6 py-8 sm:px-10 lg:px-16">
-        <Link to="/" className="flex items-center gap-2 w-fit">
-          <span className="w-7 h-7 rounded-sm bg-ink flex items-center justify-center">
-            <span className="font-serif text-paper text-[15px] leading-none mt-[2px]">A</span>
-          </span>
-          <span className="font-serif text-ink text-[20px] tracking-tight">Atrium</span>
-        </Link>
-
-        <div className="flex-1 flex flex-col justify-center max-w-md w-full mx-auto py-12">
-          {children}
-        </div>
-
-        <p className="text-[12px] text-slate-400 text-center">
-          © {new Date().getFullYear()} Atrium · Athena Education
-        </p>
+        <Logo />
+        <div className="flex-1 flex flex-col justify-center max-w-md w-full mx-auto py-10">{children}</div>
+        <p className="text-[12px] text-slate-400 text-center">© {new Date().getFullYear()} Atrium · Athena Education</p>
       </div>
 
-      <aside className="hidden lg:block relative overflow-hidden border-l border-line">
-        <img
-          src={aside.image}
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-ink/70" />
-        <div className="relative h-full flex flex-col justify-end p-16">
-          <span className="material-symbols-outlined text-bronze-200 text-[40px] mb-4">format_quote</span>
-          <p className="font-serif text-paper text-[28px] leading-snug">{aside.quote}</p>
-          <p className="mt-6 text-[13px] text-paper/70 tracking-wide">{aside.attribution}</p>
+      <aside className="hidden lg:flex relative overflow-hidden bg-gradient-to-br from-leaf-600 to-leaf-800 text-white p-16 flex-col justify-center">
+        <div className="absolute -right-24 -bottom-24 w-96 h-96 rounded-full bg-white/10" />
+        <div className="absolute right-20 -top-16 w-48 h-48 rounded-full bg-amber-300/20" />
+        <div className="relative max-w-md">
+          <h2 className="font-jakarta font-extrabold text-[36px] leading-tight">{title ?? 'Choose your courses knowing why.'}</h2>
+          <ul className="mt-10 space-y-5">
+            {POINTS.map((p) => (
+              <li key={p.text} className="flex items-center gap-4">
+                <span className="w-11 h-11 rounded-2xl bg-white/15 flex items-center justify-center shrink-0">
+                  <span className="material-symbols-outlined text-[22px]">{p.icon}</span>
+                </span>
+                <span className="text-[15.5px] text-leaf-50">{p.text}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </aside>
     </div>

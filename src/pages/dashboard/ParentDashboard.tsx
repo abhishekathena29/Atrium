@@ -54,7 +54,7 @@ export function ParentDashboard({ user }: { user: User }) {
         <Panel title="Waiting for your approval">
           <ul className="space-y-3">
             {pending.map((c) => (
-              <li key={c.id} className="border border-line-2 rounded-sm p-4">
+              <li key={c.id} className="border border-line-2 rounded-xl p-4">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
                     <p className="text-[14px] font-medium text-ink">Paid consult · {c.mentorName ?? 'mentor matched by Atrium'}</p>
@@ -62,7 +62,7 @@ export function ParentDashboard({ user }: { user: User }) {
                     <p className="text-[11.5px] text-slate-500 mt-1">Proposed price {PRICE[student.segment]}. Prototype, so no charge is taken.</p>
                   </div>
                   <div className="flex gap-2">
-                    <button onClick={() => approve(c)} className="text-[12.5px] font-medium text-paper bg-ink rounded-sm px-4 py-2 hover:bg-ink-soft">
+                    <button onClick={() => approve(c)} className="text-[12.5px] font-medium text-white bg-leaf-600 rounded-full px-4 py-2 hover:bg-leaf-700">
                       Approve &amp; pay
                     </button>
                     <button onClick={() => decline(c)} className={btnSmall}>Decline</button>

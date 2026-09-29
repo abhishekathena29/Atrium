@@ -3,12 +3,14 @@ import type { ReactNode } from 'react';
 import { useAuth } from '../auth/AuthContext';
 import type { UserRole } from '../auth/types';
 import { DashboardLayout } from '../pages/dashboard/DashboardLayout';
+import { FocusLayout } from './FocusLayout';
 
 /**
  * Requires a signed-in user and, optionally, one of `roles` (enforces the blueprint's
- * access matrix). Renders inside the dashboard shell.
+ * access matrix). Renders inside the dashboard shell, or the focused first-run shell when
+ * `focusStep` is given.
  */
-export function ProtectedRoute({ children, roles }: { children: ReactNode; roles?: UserRole[] }) {
+export function ProtectedRoute({ children, roles, focusStep }: { children: ReactNode; roles?: UserRole[]; focusStep?: number }) {
   const { user, loading } = useAuth();
   const location = useLocation();
 
@@ -28,5 +30,6 @@ export function ProtectedRoute({ children, roles }: { children: ReactNode; roles
     return <Navigate to="/dashboard" replace />;
   }
 
+  if (focusStep !== undefined) return <FocusLayout step={focusStep}>{children}</FocusLayout>;
   return <DashboardLayout>{children}</DashboardLayout>;
 }

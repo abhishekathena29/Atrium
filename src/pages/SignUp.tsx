@@ -49,7 +49,7 @@ export function SignUp() {
         subjects: [],
         parentInviteCode: role === 'parent' ? inviteCode : undefined,
       });
-      navigate(role === 'student' ? '/onboarding' : role === 'mentor' ? '/mentor/application' : '/dashboard');
+      navigate('/welcome');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to create account.');
     } finally {
@@ -58,17 +58,9 @@ export function SignUp() {
   }
 
   return (
-    <AuthLayout
-      aside={{
-        quote: 'Start with a free plan. Talk to a mentor only once you know what you want to ask.',
-        attribution: 'How Atrium works',
-        image:
-          'https://images.unsplash.com/photo-1606761568499-6d2451b23c66?auto=format&fit=crop&w=1200&q=80',
-      }}
-    >
-      <span className="eyebrow text-bronze-600">Join Atrium</span>
-      <h1 className="font-serif text-ink text-display-md mt-3">Create your account</h1>
-      <p className="text-[14px] text-slate-500 mt-2">First, tell us how you'll use Atrium.</p>
+    <AuthLayout>
+      <h1 className="font-jakarta font-extrabold text-ink text-[32px]">Create your free account</h1>
+      <p className="text-[14px] text-slate-500 mt-2">Takes a minute. Then we'll walk you through the rest.</p>
 
       <div className="mt-6 grid sm:grid-cols-3 gap-3">
         {ROLES.map((r) => {
@@ -79,16 +71,16 @@ export function SignUp() {
               type="button"
               onClick={() => setRole(r.value)}
               className={
-                'text-left rounded-md border p-3.5 transition-colors ' +
+                'text-left rounded-2xl border-2 p-3.5 transition-colors bg-white ' +
                 (active
-                  ? 'border-bronze-400 bg-accent-soft/60 ring-1 ring-bronze-300'
-                  : 'border-line-2 bg-canvas hover:border-bronze-300')
+                  ? 'border-leaf-500 ring-4 ring-leaf-100'
+                  : 'border-line hover:border-leaf-300')
               }
             >
-              <span className={'material-symbols-outlined text-[22px] ' + (active ? 'text-bronze-600' : 'text-slate-400')}>
+              <span className={'material-symbols-outlined text-[22px] ' + (active ? 'text-leaf-600' : 'text-slate-400')}>
                 {r.icon}
               </span>
-              <p className="font-serif text-ink text-[16px] mt-1.5">{r.title}</p>
+              <p className="font-jakarta font-bold text-ink text-[15px] mt-1.5">{r.title}</p>
               <p className="text-[11.5px] text-slate-500 mt-1 leading-snug">{r.blurb}</p>
             </button>
           );
@@ -108,8 +100,8 @@ export function SignUp() {
                   type="button"
                   onClick={() => setSegment(s.value)}
                   className={
-                    'text-left rounded-sm border px-3 py-2 ' +
-                    (segment === s.value ? 'border-ink bg-canvas ring-1 ring-ink' : 'border-line-2 bg-canvas')
+                    'text-left rounded-2xl border-2 px-3.5 py-2.5 bg-white ' +
+                    (segment === s.value ? 'border-leaf-500 ring-4 ring-leaf-100' : 'border-line')
                   }
                 >
                   <p className="text-[13px] font-medium text-ink">{s.title}</p>
@@ -161,7 +153,7 @@ export function SignUp() {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full inline-flex items-center justify-center gap-2 bg-ink text-paper text-[14px] font-medium px-6 py-3 rounded-sm hover:bg-ink-soft transition-colors disabled:opacity-60"
+          className="w-full inline-flex items-center justify-center gap-2 bg-leaf-600 text-white text-[15px] font-semibold px-6 py-3.5 rounded-full hover:bg-leaf-700 transition-colors disabled:opacity-60"
         >
           {submitting ? 'Creating account…' : role === 'mentor' ? 'Create account & apply' : `Create ${role} account`}
           <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
@@ -170,7 +162,7 @@ export function SignUp() {
 
       <p className="text-[13px] text-slate-500 mt-6">
         Already have an account?{' '}
-        <Link to="/signin" className="text-ink font-medium border-b border-ink/40 hover:border-ink pb-0.5">
+        <Link to="/signin" className="text-ink font-medium border-b border-leaf-600/40 hover:border-leaf-600 pb-0.5">
           Sign in
         </Link>
       </p>

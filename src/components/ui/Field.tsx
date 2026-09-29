@@ -1,18 +1,18 @@
 import type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react';
 
 const inputClass =
-  'w-full bg-canvas border border-line-2 rounded-sm px-3.5 py-2.5 text-[14px] text-ink ' +
-  'placeholder:text-slate-400 focus:border-bronze-400 focus:ring-1 focus:ring-bronze-300 ' +
+  'w-full bg-white border border-line-2 rounded-xl px-3.5 py-2.5 text-[14px] text-ink ' +
+  'placeholder:text-slate-400 focus:border-leaf-400 focus:ring-1 focus:ring-leaf-300 ' +
   'outline-none transition-colors';
 
 export const btnPrimary =
-  'inline-flex items-center justify-center gap-2 bg-ink text-paper text-[14px] font-medium px-6 py-3 rounded-sm hover:bg-ink-soft transition-colors disabled:opacity-50 disabled:cursor-not-allowed';
+  'inline-flex items-center justify-center gap-2 bg-leaf-600 text-white text-[14px] font-semibold px-6 py-3 rounded-full hover:bg-leaf-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed';
 
 export const btnSecondary =
-  'inline-flex items-center justify-center gap-2 border border-ink text-ink text-[14px] font-medium px-6 py-3 rounded-sm hover:bg-ink hover:text-paper transition-colors disabled:opacity-50';
+  'inline-flex items-center justify-center gap-2 border-2 border-leaf-600 text-leaf-700 text-[14px] font-semibold px-6 py-3 rounded-full hover:bg-leaf-50 transition-colors disabled:opacity-50';
 
 export const btnSmall =
-  'inline-flex items-center justify-center gap-1.5 text-[12.5px] font-medium text-ink border border-line-2 rounded-sm px-3 py-1.5 hover:bg-line/50 transition-colors disabled:opacity-50';
+  'inline-flex items-center justify-center gap-1.5 text-[12.5px] font-medium text-ink border border-line-2 rounded-full px-3.5 py-1.5 hover:bg-slate-50 transition-colors disabled:opacity-50';
 
 export function Field({
   label,
@@ -59,7 +59,7 @@ export function Checkbox({
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
-        className="mt-0.5 rounded-sm border-line-2 text-ink focus:ring-bronze-300"
+        className="mt-0.5 rounded border-line-2 text-leaf-600 focus:ring-leaf-300"
       />
       <span>{children}</span>
     </label>
@@ -91,8 +91,8 @@ export function ChipSelect({
               else if (!max || value.length < max) onChange([...value, o]);
             }}
             className={
-              'text-[12.5px] px-2.5 py-1 rounded-sm border transition-colors ' +
-              (on ? 'bg-ink text-paper border-ink' : 'bg-canvas text-slate-700 border-line-2 hover:border-bronze-300')
+              'text-[12.5px] px-3 py-1.5 rounded-full border transition-colors ' +
+              (on ? 'bg-leaf-600 text-white border-leaf-600' : 'bg-canvas text-slate-700 border-line-2 hover:border-leaf-300')
             }
           >
             {o}
@@ -105,7 +105,7 @@ export function ChipSelect({
 
 export function ErrorNote({ children }: { children: ReactNode }) {
   return (
-    <div className="text-[13px] text-red-700 bg-red-50 border border-red-200 rounded-sm px-3 py-2">
+    <div className="text-[13px] text-red-700 bg-red-50 border border-red-200 rounded-xl px-3 py-2">
       {children}
     </div>
   );

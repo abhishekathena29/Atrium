@@ -154,7 +154,7 @@ export function GamifyStrip({ g, to = '/progress', label }: { g: Gamification; t
         {earned.slice(-5).map((a) => <AwardBadge key={a.id} a={a} size="sm" />)}
         <span className="text-[12px] text-slate-500 ml-1">{earned.length} / {g.awards.length} awards</span>
       </div>
-      <Link to={to} className="ml-auto text-[13px] font-medium text-bronze-600 hover:text-bronze-700">
+      <Link to={to} className="ml-auto text-[13px] font-medium text-leaf-600 hover:text-leaf-700">
         {label ?? 'Progress & awards →'}
       </Link>
     </div>

@@ -25,9 +25,9 @@ export function LoadPlanView({
   const majors = intake.targetMajors.filter((m) => m !== 'Undecided');
 
   return (
-    <div className="bg-paper-2/40 border border-line rounded-md p-5 sm:p-7 space-y-5">
+    <div className="bg-paper-2/40 border border-line rounded-2xl p-5 sm:p-7 space-y-5">
       <div>
-        <h2 className="font-serif text-ink text-[26px] leading-tight">
+        <h2 className="font-jakarta font-bold text-ink text-[26px] leading-tight">
           {intake.isAthlete ? `A course load ${audience === 'student' ? 'your' : `${first}'s`} training can survive` : 'A course load built around your targets'}
         </h2>
         <p className="text-[13px] text-slate-600 mt-2 leading-relaxed">
@@ -39,7 +39,7 @@ export function LoadPlanView({
       </div>
 
       {audience === 'parent' && (
-        <div className="bg-canvas border border-line rounded-md p-4 text-[13.5px] text-slate-700 leading-relaxed">
+        <div className="bg-canvas border border-line rounded-2xl p-4 text-[13.5px] text-slate-700 leading-relaxed">
           <p className="font-semibold text-ink mb-1">What this means, in plain terms</p>
           We estimate how many hours of study a week {first} can realistically sustain
           {intake.isAthlete ? ' alongside training' : ''} (the “ceiling”), then check the chosen subjects against it.
@@ -71,8 +71,8 @@ export function LoadPlanView({
       </div>
 
       {plan.seasonNote && (
-        <div className="flex gap-2.5 bg-canvas border border-line rounded-md p-4">
-          <span className="material-symbols-outlined text-bronze-600 text-[20px]">event_upcoming</span>
+        <div className="flex gap-2.5 bg-canvas border border-line rounded-2xl p-4">
+          <span className="material-symbols-outlined text-leaf-600 text-[20px]">event_upcoming</span>
           <p className="text-[13px] text-slate-700 leading-relaxed">{plan.seasonNote}</p>
         </div>
       )}

@@ -93,7 +93,7 @@ export function Progress() {
             <form onSubmit={log} className="space-y-4">
               {error && <ErrorNote>{error}</ErrorNote>}
               {flash && (
-                <p className="text-[13px] font-medium text-violet-800 bg-violet-50 border border-violet-200 rounded-sm px-3 py-2">
+                <p className="text-[13px] font-medium text-violet-800 bg-violet-50 border border-violet-200 rounded-xl px-3 py-2">
                   {flash}
                 </p>
               )}
@@ -116,7 +116,7 @@ export function Progress() {
                     key={q}
                     type="button"
                     onClick={() => setMinutes(q)}
-                    className={'text-[12.5px] px-3 py-1 rounded-full border ' + (minutes === q ? 'bg-ink text-paper border-ink' : 'border-line-2 text-slate-600')}
+                    className={'text-[12.5px] px-3 py-1 rounded-full border ' + (minutes === q ? 'bg-leaf-600 text-white border-leaf-600' : 'border-line-2 text-slate-600')}
                   >
                     {q} min
                   </button>

@@ -70,7 +70,7 @@ export function Outcomes() {
           <Panel title="Post-exam / post-decision report">
             <div className="space-y-4">
               {error && <ErrorNote>{error}</ErrorNote>}
-              {saved && <p className="text-[13px] text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-sm px-3 py-2">Thanks, your report is saved.</p>}
+              {saved && <p className="text-[13px] text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-xl px-3 py-2">Thanks, your report is saved.</p>}
               <div className="grid sm:grid-cols-2 gap-4">
                 <Field label="Subject / AP">
                   {options.length ? (

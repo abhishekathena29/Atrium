@@ -17,6 +17,7 @@ import { Consults } from './pages/student/Consults';
 import { Outcomes } from './pages/student/Outcomes';
 import { Progress } from './pages/student/Progress';
 import { MentorApplication } from './pages/mentor/MentorApplication';
+import { Welcome } from './pages/Welcome';
 
 /** Scroll to `#hash` targets after client-side navigation, otherwise to the top. */
 function ScrollManager() {
@@ -46,8 +47,9 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
 
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/onboarding" element={<ProtectedRoute roles={['student']}><Onboarding /></ProtectedRoute>} />
-          <Route path="/questionnaire" element={<ProtectedRoute roles={['student']}><Questionnaire /></ProtectedRoute>} />
+          <Route path="/welcome" element={<ProtectedRoute focusStep={0}><Welcome /></ProtectedRoute>} />
+          <Route path="/onboarding" element={<ProtectedRoute roles={['student']} focusStep={1}><Onboarding /></ProtectedRoute>} />
+          <Route path="/questionnaire" element={<ProtectedRoute roles={['student']} focusStep={2}><Questionnaire /></ProtectedRoute>} />
           <Route path="/plan" element={<ProtectedRoute roles={['student']}><Plan /></ProtectedRoute>} />
           <Route path="/consults" element={<ProtectedRoute roles={['student']}><Consults /></ProtectedRoute>} />
           <Route path="/progress" element={<ProtectedRoute roles={['student']}><Progress /></ProtectedRoute>} />

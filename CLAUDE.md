@@ -10,7 +10,7 @@ section to concrete tasks and records decisions already made. Update its checkbo
 
 Layout: `src/data` (static data: questionnaire items, overlap graph, samples), `src/engine` (pure plan logic),
 `src/store/db.ts` (localStorage collections), `src/pages/{public,student,mentor,dashboard}`, `src/components/{plan,home,gamify}`.
-Marketing pages use the `leaf` palette and `font-jakarta`. XP and awards are always derived from real activity (`engine/gamification.ts`) and never stored.
+All pages use the `leaf` palette, `font-jakarta` headings, rounded cards and pill buttons. Don't reintroduce Fraunces or bronze. First-run routing lives in `engine/flow.ts#nextPathFor`. XP and awards are always derived from real activity (`engine/gamification.ts`) and never stored.
 
 Key rule: never show fabricated stats, rosters, testimonials, or endorsements. Mark numbers as real or illustrative, and define them on the Methodology page.
 

@@ -45,6 +45,7 @@ Status legend: `[ ]` todo · `[~]` partial / prototype-only · `[x]` done · `[-
 | Pricing (proposal) | `src/data/pricing.ts` |
 | Home page | `src/pages/Home.tsx` + `src/components/home/*` (hero, tracks, live "try it" demo, steps, motivation, subjects, parents/mentors, trust + FAQ, CTA) |
 | Gamification | `src/engine/gamification.ts` (derived XP / levels / streaks / awards / heatmap), `src/components/gamify/Gamify.tsx`, `src/pages/student/Progress.tsx` (`/progress`); study logs + unit check-offs in `src/store/db.ts` |
+| First-run flow | `src/engine/flow.ts`, `src/components/FocusLayout.tsx` (sidebar-free shell with step tracker), `src/pages/Welcome.tsx` (student / mentor / parent) |
 | Theme | `index.html`: `leaf` green palette + `font-jakarta` (Plus Jakarta Sans) for marketing headings; app screens still use Fraunces + Inter |
 
 ---
@@ -183,7 +184,17 @@ Status legend: `[ ]` todo · `[~]` partial / prototype-only · `[x]` done · `[-
 - [x] XP rules published on /methodology
 - [ ] Streak reminders / notifications (needs backend)
 - [ ] Mentor-side gamification (e.g. consults delivered badges), if wanted
-- [ ] Restyle app/dashboard screens to match the new home look (still the older serif style)
+- [x] Restyle app/dashboard screens to match the new home look
+
+## Pass 3 (2026-09-24): consistent design + first-run flow
+- [x] Every page uses the home look: Plus Jakarta headings, `leaf` green, rounded cards, pill buttons (shared: `components/Logo.tsx`, `pages/dashboard/widgets.tsx`, `components/ui/Field.tsx`, `AuthLayout`, `PageIntro`)
+- [x] Simpler sidebar: Home · My plan · Progress & awards · Consults · Report outcome · Profile, plus a "Finish setting up" card until the plan exists
+- [x] First-run flow (`engine/flow.ts#nextPathFor`, `components/FocusLayout.tsx`, `pages/Welcome.tsx`):
+  - Student: sign up → `/welcome` → `/onboarding` (3-step wizard) → `/questionnaire` → `/plan?welcome=1` (celebration + 3 next steps) → dashboard
+  - Mentor: sign up → `/welcome` (vetting explainer) → `/mentor/application`
+  - Parent: sign up → `/welcome` (linked child + what you can do) → dashboard
+  - Sign in resumes any unfinished setup first, otherwise goes where the user was headed
+- [x] Student Home: a setup hero until the plan exists; then streak/level strip, one "Next up" action, plan, consults, parent code
 
 ## Out of scope / needs a backend
 - Real auth with hashed passwords (currently localStorage, plain text; prototype only)

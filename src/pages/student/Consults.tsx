@@ -105,11 +105,11 @@ export function Consults() {
                   type="button"
                   onClick={() => setKind(k)}
                   className={
-                    'text-left rounded-md border p-4 ' +
-                    (kind === k ? 'border-bronze-400 bg-accent-soft/60 ring-1 ring-bronze-300' : 'border-line-2 bg-canvas')
+                    'text-left rounded-2xl border-2 p-4 ' +
+                    (kind === k ? 'border-leaf-500 bg-white ring-4 ring-leaf-100' : 'border-line bg-white')
                   }
                 >
-                  <p className="font-serif text-ink text-[17px]">{k === 'free' ? 'Free 20-min consult' : 'Paid consult'}</p>
+                  <p className="font-jakarta font-bold text-ink text-[17px]">{k === 'free' ? 'Free 20-min consult' : 'Paid consult'}</p>
                   <p className="text-[12px] text-slate-500 mt-1">
                     {k === 'free'
                       ? hadFree ? 'You already have one. One free consult per student.' : 'Pressure-test the plan with a mentor.'
@@ -124,7 +124,7 @@ export function Consults() {
             {matches.length ? (
               <div className="space-y-2">
                 {matches.map((m) => (
-                  <label key={m.mentor.id} className="flex items-start gap-3 border border-line-2 rounded-sm p-3 cursor-pointer">
+                  <label key={m.mentor.id} className="flex items-start gap-3 border border-line-2 rounded-xl p-3 cursor-pointer">
                     <input type="radio" name="mentor" checked={mentorId === m.mentor.id} onChange={() => setMentorId(m.mentor.id)} className="mt-1" />
                     <div>
                       <p className="text-[14px] font-medium text-ink">{m.mentor.name} <span className="text-slate-500 font-normal">· {m.mentor.headline}</span></p>
@@ -132,7 +132,7 @@ export function Consults() {
                     </div>
                   </label>
                 ))}
-                <label className="flex items-center gap-3 border border-line-2 rounded-sm p-3 cursor-pointer">
+                <label className="flex items-center gap-3 border border-line-2 rounded-xl p-3 cursor-pointer">
                   <input type="radio" name="mentor" checked={mentorId === ''} onChange={() => setMentorId('')} />
                   <span className="text-[13.5px] text-ink">Match me: let the Atrium team choose</span>
                 </label>
@@ -170,7 +170,7 @@ export function Consults() {
                 </Checkbox>
                 <Checkbox checked={adult} onChange={setAdult}>I am 18 or older.</Checkbox>
                 {!adult && (
-                  <div className="border border-line rounded-sm p-4 space-y-3 bg-paper-2/40">
+                  <div className="border border-line rounded-xl p-4 space-y-3 bg-paper-2/40">
                     <p className="text-[12.5px] font-medium text-ink">Parent / guardian consent (required under 18)</p>
                     <div className="grid sm:grid-cols-2 gap-3">
                       <Field label="Guardian name"><TextInput value={gName} onChange={(e) => setGName(e.target.value)} /></Field>

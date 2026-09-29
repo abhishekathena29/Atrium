@@ -116,7 +116,7 @@ export function Methodology() {
 
       <section className="border-b border-line">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 py-16">
-          <h2 className="font-serif text-ink text-display-sm mb-6">The numbers</h2>
+          <h2 className="font-jakarta font-bold text-ink text-[24px] mb-6">The numbers</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-[13.5px] min-w-[720px]">
               <thead>
@@ -147,7 +147,7 @@ export function Methodology() {
       <section className="bg-canvas border-b border-line">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 py-16 grid lg:grid-cols-2 gap-14">
           <div>
-            <h2 className="font-serif text-ink text-display-sm mb-4">The questionnaire</h2>
+            <h2 className="font-jakarta font-bold text-ink text-[24px] mb-4">The questionnaire</h2>
             <ul className="space-y-4 text-[14px] text-slate-600 leading-relaxed">
               <li><span className="text-ink font-medium">Temperament & load:</span> a 20-item Big Five short form in the style of the public-domain IPIP Mini-IPIP. Conscientiousness and Neuroticism set the load factor and pacing advice.</li>
               <li><span className="text-ink font-medium">Interest → direction:</span> 18 RIASEC / Holland activity items. They give the Holland code and the interest fit for each subject or AP.</li>
@@ -156,14 +156,14 @@ export function Methodology() {
             </ul>
           </div>
           <div>
-            <h2 className="font-serif text-ink text-display-sm mb-4">The overlap graph</h2>
+            <h2 className="font-jakarta font-bold text-ink text-[24px] mb-4">The overlap graph</h2>
             <p className="text-[14px] text-slate-600 leading-relaxed mb-4">
               A unit-by-unit map from each AP to the rationalised CBSE syllabus chapters that cover it. It is the
               core of the India plan. Version <span className="text-ink">{GRAPH_VERSION}</span>. Values are
               illustrative until the manual mapping pass is complete. After that, mentor annotations and reported
               outcomes will sharpen them.
             </p>
-            <div className="border border-line rounded-sm divide-y divide-line">
+            <div className="border border-line rounded-xl divide-y divide-line">
               {MAPPED_COVERAGE.map((c) => (
                 <div key={c.board + c.stream} className="grid grid-cols-3 px-4 py-2 text-[13px]">
                   <span className="text-ink">{c.board}</span>
@@ -179,7 +179,7 @@ export function Methodology() {
       <section className="border-b border-line">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 py-16 grid lg:grid-cols-2 gap-14">
           <div>
-            <h2 className="font-serif text-ink text-display-sm mb-4">What we don't claim</h2>
+            <h2 className="font-jakarta font-bold text-ink text-[24px] mb-4">What we don't claim</h2>
             <ul className="space-y-2 text-[14px] text-slate-600 leading-relaxed list-disc pl-5">
               <li>Plans are guidance. They are not a score or admissions guarantee.</li>
               <li>No AI writes anything a student sees without a human checking it. There is no AI layer yet.</li>
@@ -187,7 +187,7 @@ export function Methodology() {
             </ul>
           </div>
           <div>
-            <h2 className="font-serif text-ink text-display-sm mb-4">Removed from the site ({UPDATED})</h2>
+            <h2 className="font-jakarta font-bold text-ink text-[24px] mb-4">Removed from the site ({UPDATED})</h2>
             <ul className="space-y-1.5 text-[14px] text-slate-600">
               {REMOVED.map((r) => (
                 <li key={r} className="flex gap-2">

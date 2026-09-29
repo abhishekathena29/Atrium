@@ -1,12 +1,15 @@
 import { useState, type FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { AuthLayout } from '../components/auth/AuthLayout';
 import { Field, TextInput } from '../components/ui/Field';
+import { nextPathFor } from '../engine/flow';
 
 export function SignIn() {
   const { signIn } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = (location.state as { from?: string } | null)?.from;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -17,8 +20,10 @@ export function SignIn() {
     setError(null);
     setSubmitting(true);
     try {
-      await signIn(email, password);
-      navigate('/dashboard');
+      const u = await signIn(email, password);
+      // Unfinished first-run setup takes priority over wherever they were headed.
+      const next = nextPathFor(u);
+      navigate(next !== '/dashboard' ? next : from ?? '/dashboard');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to sign in.');
     } finally {
@@ -27,23 +32,15 @@ export function SignIn() {
   }
 
   return (
-    <AuthLayout
-      aside={{
-        quote: 'Pick the APs and courses that cost you the least and count the most.',
-        attribution: 'What Atrium is for',
-        image:
-          'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80',
-      }}
-    >
-      <span className="eyebrow text-bronze-600">Welcome back</span>
-      <h1 className="font-serif text-ink text-display-md mt-3">Sign in to Atrium</h1>
+    <AuthLayout title="Welcome back. Your plan is where you left it.">
+      <h1 className="font-jakarta font-extrabold text-ink text-[32px]">Sign in</h1>
       <p className="text-[14px] text-slate-500 mt-2">
-        Pick up your plan, questionnaire, and consults where you left off.
+        Good to see you again.
       </p>
 
       <form onSubmit={handleSubmit} className="mt-8 space-y-4">
         {error && (
-          <div className="text-[13px] text-red-700 bg-red-50 border border-red-200 rounded-sm px-3 py-2">
+          <div className="text-[13px] text-red-700 bg-red-50 border border-red-200 rounded-xl px-3 py-2">
             {error}
           </div>
         )}
@@ -73,7 +70,7 @@ export function SignIn() {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full inline-flex items-center justify-center gap-2 bg-ink text-paper text-[14px] font-medium px-6 py-3 rounded-sm hover:bg-ink-soft transition-colors disabled:opacity-60"
+          className="w-full inline-flex items-center justify-center gap-2 bg-leaf-600 text-white text-[15px] font-semibold px-6 py-3.5 rounded-full hover:bg-leaf-700 transition-colors disabled:opacity-60"
         >
           {submitting ? 'Signing in…' : 'Sign in'}
           <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
@@ -82,7 +79,7 @@ export function SignIn() {
 
       <p className="text-[13px] text-slate-500 mt-6">
         New to Atrium?{' '}
-        <Link to="/signup" className="text-ink font-medium border-b border-ink/40 hover:border-ink pb-0.5">
+        <Link to="/signup" className="text-ink font-medium border-b border-leaf-600/40 hover:border-leaf-600 pb-0.5">
           Create an account
         </Link>
       </p>

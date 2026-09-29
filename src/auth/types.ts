@@ -71,6 +71,8 @@ export interface User {
   parentInviteCode?: string;
   /** Student: parent/guardian consent recorded for consults (safeguarding, M10a). */
   guardianConsent?: { name: string; email: string; at: string };
+  /** Set once the user has seen their role's welcome screen (first-run flow). */
+  welcomedAt?: string;
   createdAt: string;
 }
 

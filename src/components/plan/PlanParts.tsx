@@ -41,7 +41,7 @@ export function PlanRow({
   children?: ReactNode;
 }) {
   return (
-    <div className={`bg-canvas border border-line border-l-[3px] ${BORDER[tone]} rounded-sm px-4 py-3.5`}>
+    <div className={`bg-canvas border border-line border-l-[3px] ${BORDER[tone]} rounded-xl px-4 py-3.5`}>
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <p className="text-[14.5px] font-semibold text-ink">
@@ -62,9 +62,9 @@ export function PlanRow({
 
 export function SummaryTile({ label, value }: { label: string; value: ReactNode }) {
   return (
-    <div className="bg-paper-2/70 rounded-md px-4 py-3.5">
+    <div className="bg-paper-2/70 rounded-2xl px-4 py-3.5">
       <p className="text-[11.5px] text-slate-500">{label}</p>
-      <p className="text-[18px] font-semibold text-ink mt-1 leading-tight">{value}</p>
+      <p className="text-[15.5px] font-bold text-ink mt-1 leading-snug">{value}</p>
     </div>
   );
 }
@@ -74,7 +74,7 @@ export function LoadMeter({ load, ceiling, note }: { load: number; ceiling: numb
   const pct = Math.min(100, Math.round((load / ceiling) * 100));
   const over = load > ceiling;
   return (
-    <div className="bg-paper-2/70 rounded-md px-4 py-4">
+    <div className="bg-paper-2/70 rounded-2xl px-4 py-4">
       <div className="flex items-center justify-between">
         <p className="text-[13px] text-slate-600">Weekly academic load vs your ceiling</p>
         <p className={`text-[14px] font-semibold ${over ? 'text-red-700' : 'text-ink'}`}>
@@ -83,7 +83,7 @@ export function LoadMeter({ load, ceiling, note }: { load: number; ceiling: numb
       </div>
       <div className="mt-2 h-2 rounded-full bg-canvas overflow-hidden border border-line">
         <div
-          className={`h-full rounded-full ${over ? 'bg-red-600' : pct >= 85 ? 'bg-bronze-500' : 'bg-emerald-600'}`}
+          className={`h-full rounded-full ${over ? 'bg-red-600' : pct >= 85 ? 'bg-leaf-500' : 'bg-emerald-600'}`}
           style={{ width: `${pct}%` }}
         />
       </div>
@@ -99,7 +99,7 @@ export function MentorNudge({ initials, title, subtitle, action }: {
   action: ReactNode;
 }) {
   return (
-    <div className="bg-paper-2/70 rounded-md px-4 py-3.5 flex items-center gap-3">
+    <div className="bg-paper-2/70 rounded-2xl px-4 py-3.5 flex items-center gap-3">
       <div className="w-9 h-9 rounded-full bg-slate-100 border border-line-2 flex items-center justify-center shrink-0">
         <span className="text-[12px] font-semibold text-slate-600">{initials}</span>
       </div>
