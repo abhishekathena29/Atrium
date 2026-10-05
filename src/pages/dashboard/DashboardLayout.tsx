@@ -15,6 +15,7 @@ const NAV: Record<UserRole, NavItem[]> = {
     { label: 'Home', icon: 'home', to: '/dashboard' },
     { label: 'My plan', icon: 'route', to: '/plan' },
     { label: 'Progress & awards', icon: 'emoji_events', to: '/progress' },
+    { label: 'Ask Atrium', icon: 'auto_awesome', to: '/coach' },
     { label: 'Consults', icon: 'forum', to: '/consults' },
     { label: 'Report outcome', icon: 'fact_check', to: '/outcomes' },
     { label: 'Profile', icon: 'person', to: '/onboarding' },
@@ -35,7 +36,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   if (!user) return null;
   const items = NAV[user.role];
   const setup = user.role === 'student' ? getStudentState(user) : null;
-  const setupDone = setup ? [setup.intakeDone, !!setup.profile].filter(Boolean).length : 2;
+  const setupDone = setup ? [setup.quizDone, setup.intakeDone].filter(Boolean).length : 2;
 
   function handleSignOut() {
     signOut();
@@ -49,7 +50,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-paper text-ink flex">
       {/* Sidebar */}
-      <aside className="hidden md:flex w-64 shrink-0 flex-col border-r border-line bg-white px-4 py-6 sticky top-0 h-screen">
+      <aside className="hidden md:flex w-64 shrink-0 flex-col border-r border-line bg-canvas px-4 py-6 sticky top-0 h-screen">
         <div className="px-2 mb-8">
           <Logo to="/dashboard" />
         </div>
@@ -69,7 +70,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             className="mt-6 mx-1 rounded-2xl bg-leaf-50 border border-leaf-100 p-4 block hover:border-leaf-300 transition-colors"
           >
             <p className="text-[12.5px] font-bold text-leaf-800">Finish setting up</p>
-            <div className="h-1.5 rounded-full bg-white mt-2 overflow-hidden">
+            <div className="h-1.5 rounded-full bg-canvas mt-2 overflow-hidden">
               <div className="h-full bg-leaf-500 rounded-full" style={{ width: `${(setupDone / 2) * 100}%` }} />
             </div>
             <p className="text-[12px] text-leaf-700 mt-2">{setupDone} of 2 done · continue →</p>
@@ -97,8 +98,8 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       </aside>
 
       {/* Main column */}
-      <div className="flex-1 min-w-0 flex flex-col">
-        <header className="md:hidden border-b border-line bg-white/95 backdrop-blur-md sticky top-0 z-40">
+      <div className="flex-1 min-w-0 flex flex-col overflow-x-clip">
+        <header className="md:hidden border-b border-line bg-paper/80 backdrop-blur-md sticky top-0 z-40">
           <div className="flex items-center justify-between px-5 h-14">
             <Logo to="/dashboard" />
             <button onClick={handleSignOut} className="text-[13px] font-semibold text-slate-600">Sign out</button>

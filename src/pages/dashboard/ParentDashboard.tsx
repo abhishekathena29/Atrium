@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { findUserById } from '../../auth/AuthContext';
-import type { User } from '../../auth/types';
-import { getStudentState } from '../../engine/studentState';
+import { COUNTRY_LABEL, type User } from '../../auth/types';
+import { countriesOf } from '../../data/countries';
+import { getStudentState, intakeOf } from '../../engine/studentState';
 import { listConsults, listOutcomes, saveConsult, type Consult } from '../../store/db';
 import { IndiaPlanView } from '../../components/plan/IndiaPlanView';
 import { LoadPlanView } from '../../components/plan/LoadPlanView';
@@ -9,8 +10,8 @@ import { ConsultStatusTag } from '../../components/ConsultStatusTag';
 import { PRICE } from '../../data/pricing';
 import { btnSmall } from '../../components/ui/Field';
 import { PageHeader, Panel } from './widgets';
-import { computeGamification, fmtMinutes } from '../../engine/gamification';
-import { AwardBadge } from '../../components/gamify/Gamify';
+import { computeGamification, fmtMinutes, profileCompletion } from '../../engine/gamification';
+import { AwardBadge, ProgressRing } from '../../components/gamify/Gamify';
 
 export function ParentDashboard({ user }: { user: User }) {
   const [, force] = useState(0);
@@ -62,7 +63,7 @@ export function ParentDashboard({ user }: { user: User }) {
                     <p className="text-[11.5px] text-slate-500 mt-1">Proposed price {PRICE[student.segment]}. Prototype, so no charge is taken.</p>
                   </div>
                   <div className="flex gap-2">
-                    <button onClick={() => approve(c)} className="text-[12.5px] font-medium text-white bg-leaf-600 rounded-full px-4 py-2 hover:bg-leaf-700">
+                    <button onClick={() => approve(c)} className="text-[12.5px] font-medium text-white bg-leaf-600 rounded-full px-4 py-2 hover:brightness-110 hover:shadow-glow">
                       Approve &amp; pay
                     </button>
                     <button onClick={() => decline(c)} className={btnSmall}>Decline</button>
@@ -75,19 +76,36 @@ export function ParentDashboard({ user }: { user: User }) {
       )}
 
       <div className="grid lg:grid-cols-3 gap-6 mt-6">
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 min-w-0">
           {state.indiaPlan && <IndiaPlanView user={student} plan={state.indiaPlan} audience="parent" />}
           {state.loadPlan && <LoadPlanView user={student} plan={state.loadPlan} hollandCode={state.profile!.hollandCode} audience="parent" />}
           {!state.profile && (
             <Panel title="Plan not ready yet">
               <p className="text-[13px] text-slate-600">
-                {first} hasn't finished {state.intakeDone ? 'the questionnaire' : 'onboarding'} yet. The plan appears here as soon as they do.
+                {first} hasn't finished {state.quizDone ? 'the studies step' : 'the About-you questions'} yet. The plan appears here as soon as they do.
               </p>
             </Panel>
           )}
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-6 min-w-0">
+          <Panel title={`${first}'s setup`}>
+            {(() => {
+              const c = profileCompletion(student, state);
+              const intake = intakeOf(student);
+              return (
+                <div className="flex items-center gap-4">
+                  <ProgressRing pct={c.pct} size={64} stroke={7}>
+                    <span className="text-[14px] font-bold text-ink">{c.pct}%</span>
+                  </ProgressRing>
+                  <div className="text-[12.5px] text-slate-600 space-y-1 min-w-0">
+                    <p><span className="text-slate-500">Majors:</span> <span className="text-ink">{intake?.targetMajors.join(', ') || 'not set'}</span></p>
+                    <p><span className="text-slate-500">Applying to:</span> <span className="text-ink">{intake?.targetCountries?.length ? countriesOf(intake).map((x) => COUNTRY_LABEL[x]).join(', ') : 'not set'}</span></p>
+                  </div>
+                </div>
+              );
+            })()}
+          </Panel>
           <Panel title="Consults">
             {consults.length === 0 ? (
               <p className="text-[13px] text-slate-500">No consults requested yet.</p>

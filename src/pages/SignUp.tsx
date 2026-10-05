@@ -12,8 +12,8 @@ const ROLES: { value: UserRole; title: string; blurb: string; icon: string }[] =
 ];
 
 const SEGMENTS: { value: Segment; title: string; blurb: string }[] = [
-  { value: 'india', title: 'India', blurb: 'AP self-study for US applications' },
-  { value: 'sgus', title: 'Singapore · US track', blurb: 'IB / A-Level / AP course load, incl. athletes' },
+  { value: 'india', title: 'India', blurb: 'APs on top of your boards, for US, UK and other applications' },
+  { value: 'sgus', title: 'Singapore · US track', blurb: 'IB, A-Levels or US high school, plus APs on top. Athletes welcome' },
 ];
 
 function roleParam(v: string | null): UserRole {
@@ -71,7 +71,7 @@ export function SignUp() {
               type="button"
               onClick={() => setRole(r.value)}
               className={
-                'text-left rounded-2xl border-2 p-3.5 transition-colors bg-white ' +
+                'text-left rounded-2xl border-2 p-3.5 transition-colors bg-canvas ' +
                 (active
                   ? 'border-leaf-500 ring-4 ring-leaf-100'
                   : 'border-line hover:border-leaf-300')
@@ -100,7 +100,7 @@ export function SignUp() {
                   type="button"
                   onClick={() => setSegment(s.value)}
                   className={
-                    'text-left rounded-2xl border-2 px-3.5 py-2.5 bg-white ' +
+                    'text-left rounded-2xl border-2 px-3.5 py-2.5 bg-canvas ' +
                     (segment === s.value ? 'border-leaf-500 ring-4 ring-leaf-100' : 'border-line')
                   }
                 >
@@ -153,7 +153,7 @@ export function SignUp() {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full inline-flex items-center justify-center gap-2 bg-leaf-600 text-white text-[15px] font-semibold px-6 py-3.5 rounded-full hover:bg-leaf-700 transition-colors disabled:opacity-60"
+          className="w-full inline-flex items-center justify-center gap-2 bg-leaf-600 text-white text-[15px] font-semibold px-6 py-3.5 rounded-full hover:brightness-110 hover:shadow-glow transition-colors disabled:opacity-60"
         >
           {submitting ? 'Creating account…' : role === 'mentor' ? 'Create account & apply' : `Create ${role} account`}
           <span className="material-symbols-outlined text-[18px]">arrow_forward</span>

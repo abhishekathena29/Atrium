@@ -1,12 +1,12 @@
 import type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react';
 
 const inputClass =
-  'w-full bg-white border border-line-2 rounded-xl px-3.5 py-2.5 text-[14px] text-ink ' +
+  'w-full bg-canvas border border-line-2 rounded-xl px-3.5 py-2.5 text-[14px] text-ink ' +
   'placeholder:text-slate-400 focus:border-leaf-400 focus:ring-1 focus:ring-leaf-300 ' +
   'outline-none transition-colors';
 
 export const btnPrimary =
-  'inline-flex items-center justify-center gap-2 bg-leaf-600 text-white text-[14px] font-semibold px-6 py-3 rounded-full hover:bg-leaf-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed';
+  'inline-flex items-center justify-center gap-2 bg-leaf-600 text-white text-[14px] font-semibold px-6 py-3 rounded-full hover:brightness-110 hover:shadow-glow transition-colors disabled:opacity-50 disabled:cursor-not-allowed';
 
 export const btnSecondary =
   'inline-flex items-center justify-center gap-2 border-2 border-leaf-600 text-leaf-700 text-[14px] font-semibold px-6 py-3 rounded-full hover:bg-leaf-50 transition-colors disabled:opacity-50';
@@ -86,6 +86,7 @@ export function ChipSelect({
           <button
             key={o}
             type="button"
+            aria-pressed={on}
             onClick={() => {
               if (on) onChange(value.filter((v) => v !== o));
               else if (!max || value.length < max) onChange([...value, o]);

@@ -68,6 +68,30 @@ export function pacingNoteFor(ocean: Record<OceanTrait, number>): string {
   return 'A steady weekly rhythm with one review checkpoint per month.';
 }
 
+/** Weekly hours already spoken for outside school: coaching/tuition plus activities. */
+export function committedHours(career: CareerLayer): number {
+  return (career.currentLoadHours || 0) + (career.activityHours || 0);
+}
+
+/**
+ * Existing workload trims the study budget a student can realistically add: each committed
+ * hour above 6 a week removes 2%, down to a floor of 60%. Illustrative; see /methodology.
+ */
+export function workloadFactorFor(committed: number): number {
+  const raw = 1 - 0.02 * Math.max(0, committed - 6);
+  return Math.round(Math.min(1, Math.max(0.6, raw)) * 100) / 100;
+}
+
+/**
+ * Temperament caps how stretched a plan gets. Students who report high stress or prefer less
+ * structure get at most one demanding AP and three in total, so the plan stays sustainable.
+ */
+export function stretchCapsFor(ocean: Record<OceanTrait, number>): { maxHard: number; maxTotal: number; why: string | null } {
+  if (ocean.N >= 3.5) return { maxHard: 1, maxTotal: 3, why: 'You said pressure gets to you, so the plan keeps to one demanding AP.' };
+  if (ocean.C < 3) return { maxHard: 1, maxTotal: 3, why: 'You prefer flexible routines, so the plan keeps to one demanding AP and fewer in total.' };
+  return { maxHard: 2, maxTotal: 4, why: null };
+}
+
 /** Selected Holland-type fit (0–1) for a set of target types. */
 export function riasecFit(riasec: Record<RiasecType, number>, types: RiasecType[]): number {
   if (!types.length) return 0.5;

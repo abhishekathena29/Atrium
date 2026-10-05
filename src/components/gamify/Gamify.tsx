@@ -1,3 +1,4 @@
+import { useEffect, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { fmtMinutes, type Award, type DayCell, type Gamification } from '../../engine/gamification';
 
@@ -15,7 +16,7 @@ export function StreakCard({ g }: { g: Gamification }) {
     <div className="rounded-2xl bg-gradient-to-br from-orange-50 to-amber-50 border border-orange-100 p-5">
       <div className="flex items-center gap-3">
         <div className={`w-12 h-12 rounded-full flex items-center justify-center ${g.streak ? 'bg-orange-500' : 'bg-slate-200'}`}>
-          <span className="material-symbols-outlined text-white text-[26px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+          <span aria-hidden="true" className={'material-symbols-outlined text-[26px] ' + (g.streak ? 'text-white' : 'text-slate-500')} style={{ fontVariationSettings: "'FILL' 1" }}>
             local_fire_department
           </span>
         </div>
@@ -45,8 +46,8 @@ export function LevelCard({ g }: { g: Gamification }) {
           <p className="text-[12px] text-slate-600">{g.xp} XP</p>
         </div>
       </div>
-      <div className="mt-3 h-2 rounded-full bg-white overflow-hidden">
-        <div className="h-full bg-violet-500 rounded-full transition-all" style={{ width: `${pct}%` }} />
+      <div className="mt-3 h-2 rounded-full bg-canvas overflow-hidden">
+        <div className="h-full bg-violet-500 rounded-full fill-anim" style={{ width: `${pct}%` }} />
       </div>
       <p className="text-[12px] mt-2 text-violet-800">
         {g.nextLevelAt ? `${g.nextLevelAt - g.xp} XP to level ${g.level + 1}` : 'Top level reached'}
@@ -62,9 +63,9 @@ export function GoalRing({ g }: { g: Gamification }) {
   return (
     <div className="rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 p-5 flex items-center gap-4">
       <svg width="64" height="64" viewBox="0 0 64 64" className="shrink-0 -rotate-90">
-        <circle cx="32" cy="32" r={r} fill="none" stroke="white" strokeWidth="7" />
-        <circle cx="32" cy="32" r={r} fill="none" stroke="#059669" strokeWidth="7" strokeLinecap="round"
-          strokeDasharray={c} strokeDashoffset={c * (1 - pct)} />
+        <circle cx="32" cy="32" r={r} fill="none" stroke="#1E2A44" strokeWidth="7" />
+        <circle cx="32" cy="32" r={r} fill="none" stroke="#34D399" strokeWidth="7" strokeLinecap="round"
+          strokeDasharray={c} strokeDashoffset={c * (1 - pct)} className="fill-anim" />
       </svg>
       <div>
         <p className="text-[18px] font-bold text-ink leading-tight">{Math.round(pct * 100)}%</p>
@@ -157,6 +158,81 @@ export function GamifyStrip({ g, to = '/progress', label }: { g: Gamification; t
       <Link to={to} className="ml-auto text-[13px] font-medium text-leaf-600 hover:text-leaf-700">
         {label ?? 'Progress & awards →'}
       </Link>
+    </div>
+  );
+}
+
+/** Circular progress ring with a centred label. */
+export function ProgressRing({ pct, size = 72, stroke = 8, color = '#4ADE80', children }: {
+  pct: number;
+  size?: number;
+  stroke?: number;
+  color?: string;
+  children?: ReactNode;
+}) {
+  const r = (size - stroke) / 2;
+  const c = 2 * Math.PI * r;
+  const [drawn, setDrawn] = useState(0);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setDrawn(Math.max(0, Math.min(1, pct / 100))));
+    return () => cancelAnimationFrame(id);
+  }, [pct]);
+  return (
+    <div className="relative shrink-0" style={{ width: size, height: size }}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="-rotate-90">
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#1E2A44" strokeWidth={stroke} />
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth={stroke} strokeLinecap="round"
+          strokeDasharray={c} strokeDashoffset={c * (1 - drawn)} className="fill-anim" style={{ filter: `drop-shadow(0 0 6px ${color}66)` }} />
+      </svg>
+      <div className="absolute inset-0 flex items-center justify-center text-center">{children}</div>
+    </div>
+  );
+}
+
+/** Floating "+40 XP · Know yourself unlocked" toast. Re-mount with a new `key` to replay. */
+export function XpToast({ xp, label }: { xp: number; label: string }) {
+  const [shown, setShown] = useState(true);
+  // The CSS animation fades it out; this also removes it when reduced motion disables that.
+  useEffect(() => {
+    const t = window.setTimeout(() => setShown(false), 2700);
+    return () => window.clearTimeout(t);
+  }, []);
+  if (!shown) return null;
+  return (
+    <div className="xp-toast pointer-events-none" role="status" aria-live="polite">
+      <div className="flex items-center gap-3 rounded-full bg-canvas border border-leaf-300 shadow-glow pl-2 pr-5 py-2">
+        <span className="w-9 h-9 rounded-full bg-leaf-500 flex items-center justify-center">
+          <span aria-hidden="true" className="material-symbols-outlined text-white text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
+        </span>
+        <span className="font-jakarta font-extrabold text-leaf-700 text-[16px]">+{xp} XP</span>
+        <span className="text-[13.5px] text-ink font-semibold">{label}</span>
+      </div>
+    </div>
+  );
+}
+
+const CONFETTI_COLORS = ['#4ADE80', '#A78BFA', '#38BDF8', '#FBBF24', '#FB7185', '#2DD4BF'];
+
+/** A short burst of CSS confetti over its parent (which should be `relative overflow-hidden`). */
+export function Confetti({ pieces = 36 }: { pieces?: number }) {
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+      {Array.from({ length: pieces }, (_, i) => {
+        const left = (i * 37) % 100;
+        const dx = ((i * 53) % 120) - 60;
+        return (
+          <span
+            key={i}
+            className="confetti-piece"
+            style={{
+              left: `${left}%`,
+              background: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+              animationDelay: `${(i % 9) * 0.07}s`,
+              ['--dx' as string]: `${dx}px`,
+            }}
+          />
+        );
+      })}
     </div>
   );
 }

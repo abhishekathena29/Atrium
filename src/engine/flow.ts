@@ -1,7 +1,8 @@
 /**
  * First-run flow: where a user should land after signing up or signing in.
- * Students: welcome → about you (onboarding) → questionnaire → plan reveal → dashboard.
- * Mentors: welcome → application. Parents: welcome → dashboard.
+ * Students: welcome → about you (light personality quiz) → your studies (curriculum, APs,
+ * goals, workload) → plan reveal → dashboard. Mentors: welcome → application.
+ * Parents: welcome → dashboard.
  */
 
 import type { User } from '../auth/types';
@@ -11,9 +12,9 @@ import { getStudentState } from './studentState';
 export function nextPathFor(user: User): string {
   if (user.role === 'student') {
     const s = getStudentState(user);
-    if (!user.welcomedAt && !s.intakeDone) return '/welcome';
+    if (!user.welcomedAt && !s.profile) return '/welcome';
+    if (!s.quizDone) return '/questionnaire';
     if (!s.intakeDone) return '/onboarding';
-    if (!s.profile) return '/questionnaire';
     return '/dashboard';
   }
   if (!user.welcomedAt) return '/welcome';
@@ -22,4 +23,4 @@ export function nextPathFor(user: User): string {
 }
 
 /** Steps shown in the focused first-run header for students. */
-export const STUDENT_STEPS = ['Welcome', 'About you', 'Questionnaire', 'Your plan'];
+export const STUDENT_STEPS = ['Welcome', 'About you', 'Your studies', 'Your plan'];

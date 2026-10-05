@@ -5,7 +5,7 @@ import { STUDENT_STEPS } from '../engine/flow';
 import { Logo } from './Logo';
 
 /**
- * Distraction-free shell for the first-run flow (welcome, onboarding, questionnaire):
+ * Distraction-free shell for the first-run flow (welcome, about-you quiz, your studies):
  * logo, a step tracker for students, and a "save & exit" escape hatch. No sidebar.
  */
 export function FocusLayout({ step, children }: { step: number; children: ReactNode }) {
@@ -13,8 +13,8 @@ export function FocusLayout({ step, children }: { step: number; children: ReactN
   const showSteps = user?.role === 'student';
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-leaf-50 via-paper to-paper text-ink">
-      <header className="bg-white/90 backdrop-blur-md border-b border-line sticky top-0 z-40">
+    <div className="min-h-screen overflow-x-clip bg-gradient-to-b from-leaf-50 via-paper to-paper text-ink">
+      <header className="bg-paper/80 backdrop-blur-md border-b border-line sticky top-0 z-40">
         <div className="max-w-5xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between gap-4">
           <Logo to="/dashboard" />
           {showSteps && (

@@ -19,16 +19,15 @@ export function Subjects() {
             </h2>
           </div>
           <p className="text-[14.5px] text-slate-600 max-w-md">
-            The planner covers these subject areas. Mentors are matched from your plan, and we're recruiting
-            founding mentors in each.
+            The planner covers these areas. We are recruiting founding mentors in each.
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 stagger">
           {SUBJECTS.map((s) => (
-            <article key={s.title} className="bg-white rounded-3xl border border-line p-6 shadow-sm hover:shadow-card hover:-translate-y-0.5 transition-all">
+            <article key={s.title} className="bg-canvas rounded-3xl border border-line p-6 shadow-sm lift">
               <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${s.color}`}>
-                <span className="material-symbols-outlined text-[26px]">{s.icon}</span>
+                <span aria-hidden="true" className="material-symbols-outlined text-[26px]">{s.icon}</span>
               </div>
               <h3 className="font-jakarta font-bold text-ink text-[19px] mt-4">{s.title}</h3>
               <div className="flex flex-wrap gap-1.5 mt-3">

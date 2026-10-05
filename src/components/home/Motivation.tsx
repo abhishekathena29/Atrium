@@ -23,40 +23,39 @@ const FEATURES = [
 export function Motivation() {
   return (
     <section className="bg-gradient-to-b from-violet-50/60 to-paper">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 py-20 grid lg:grid-cols-2 gap-12 items-center">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div>
           <p className="text-[13px] font-bold uppercase tracking-widest text-violet-600">Stay motivated</p>
           <h2 className="font-jakarta font-extrabold text-ink text-[34px] sm:text-[40px] leading-tight mt-3">
             Self-study is easier when you can see it adding up
           </h2>
           <p className="text-[15px] text-slate-600 leading-relaxed mt-4">
-            Self-studying an AP alongside boards is a long haul. Atrium turns your plan into small daily wins,
-            and parents can cheer you on from their dashboard.
+            Your plan turns into small daily wins, and parents can cheer you on.
           </p>
-          <div className="mt-8 grid sm:grid-cols-2 gap-4">
+          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4 stagger">
             {FEATURES.map((f) => (
-              <div key={f.title} className="bg-white rounded-2xl border border-line p-4 shadow-sm">
-                <span className={`material-symbols-outlined text-[26px] ${f.color}`} style={{ fontVariationSettings: "'FILL' 1" }}>{f.icon}</span>
+              <div key={f.title} className="bg-canvas rounded-2xl border border-line p-4 shadow-sm">
+                <span aria-hidden="true" className={`material-symbols-outlined text-[26px] ${f.color}`} style={{ fontVariationSettings: "'FILL' 1" }}>{f.icon}</span>
                 <p className="font-jakarta font-bold text-ink text-[15px] mt-2">{f.title}</p>
                 <p className="text-[13px] text-slate-600 mt-1 leading-snug">{f.body}</p>
               </div>
             ))}
           </div>
-          <Link to="/signup?role=student" className="mt-8 inline-flex items-center gap-2 bg-violet-600 text-white text-[14px] font-semibold rounded-full px-5 py-3 hover:bg-violet-700 transition-colors">
+          <Link to="/signup?role=student" className="mt-8 inline-flex items-center gap-2 bg-violet-600 text-white text-[14px] font-semibold rounded-full px-5 py-3 hover:brightness-110 hover:shadow-glow transition-colors">
             Start your streak
-            <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+            <span aria-hidden="true" className="material-symbols-outlined text-[18px]">arrow_forward</span>
           </Link>
         </div>
 
-        <div className="relative">
-          <div className="bg-white rounded-3xl border border-line shadow-elev p-6">
+        <div className="relative animate-float-slow">
+          <div className="bg-canvas rounded-3xl border border-line shadow-elev p-6">
             <div className="flex items-center justify-between">
               <p className="font-jakarta font-bold text-ink text-[16px]">Your week</p>
-              <span className="text-[11px] font-semibold text-slate-500 bg-slate-50 rounded-full px-2.5 py-1 border border-line">Preview</span>
+              <span className="text-[11px] font-semibold text-slate-500 bg-slate-50 rounded-full px-2.5 py-1 border border-line">Sample · illustrative</span>
             </div>
             <div className="grid grid-cols-3 gap-3 mt-4">
               <div className="rounded-2xl bg-orange-50 p-3 text-center">
-                <span className="material-symbols-outlined text-orange-500 text-[28px]" style={{ fontVariationSettings: "'FILL' 1" }}>local_fire_department</span>
+                <span aria-hidden="true" className="material-symbols-outlined text-orange-500 text-[28px]" style={{ fontVariationSettings: "'FILL' 1" }}>local_fire_department</span>
                 <p className="font-jakarta font-extrabold text-ink text-[20px] leading-none">12</p>
                 <p className="text-[11px] text-slate-600 mt-1">day streak</p>
               </div>
@@ -66,7 +65,7 @@ export function Motivation() {
                 <p className="text-[11px] text-slate-600">820 XP</p>
               </div>
               <div className="rounded-2xl bg-emerald-50 p-3 text-center">
-                <span className="material-symbols-outlined text-emerald-600 text-[28px]">flag</span>
+                <span aria-hidden="true" className="material-symbols-outlined text-emerald-600 text-[28px]">flag</span>
                 <p className="font-jakarta font-extrabold text-ink text-[20px] leading-none">96%</p>
                 <p className="text-[11px] text-slate-600 mt-1">weekly goal</p>
               </div>
@@ -82,7 +81,7 @@ export function Motivation() {
             </div>
 
             <p className="font-jakarta font-bold text-ink text-[14px] mt-6 mb-3">Awards</p>
-            <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+            <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 stagger">
               {PREVIEW_AWARDS.map((a) => <AwardBadge key={a.id} a={a} size="md" />)}
             </div>
           </div>

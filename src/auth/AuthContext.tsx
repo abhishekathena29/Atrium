@@ -29,8 +29,13 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 function readAccounts(): StoredAccount[] {
   try {
     const raw: StoredAccount[] = JSON.parse(localStorage.getItem(ACCOUNTS_KEY) ?? '[]');
-    // Accounts created before segments existed default to the launch segment.
-    return raw.map((a) => ({ ...a, segment: a.segment ?? 'india' }));
+    // Accounts created before segments existed default to the launch segment. AP used to be
+    // offered as a "curriculum"; it now means a US high school (AP is an add-on, not a system).
+    return raw.map((a) => ({
+      ...a,
+      segment: a.segment ?? 'india',
+      sgus: a.sgus && (a.sgus.curriculum as string) === 'AP' ? { ...a.sgus, curriculum: 'US' } : a.sgus,
+    }));
   } catch {
     return [];
   }

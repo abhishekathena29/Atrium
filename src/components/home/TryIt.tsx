@@ -28,16 +28,16 @@ export function TryIt() {
   const skip = plan.items.find((i) => i.recommendation === 'skip');
 
   return (
-    <section className="bg-white border-y border-line">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 py-20 grid lg:grid-cols-12 gap-10 items-center">
-        <div className="lg:col-span-5">
-          <p className="text-[13px] font-bold uppercase tracking-widest text-leaf-600">Try it now · India</p>
+    <section className="bg-canvas border-y border-line">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 py-20 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        <div className="lg:col-span-5 min-w-0">
+          <p className="text-[13px] font-bold uppercase tracking-widest text-leaf-600">Free AP planner · try it · India</p>
           <h2 className="font-jakarta font-extrabold text-ink text-[32px] sm:text-[38px] leading-tight mt-3">
             Which APs overlap with your stream?
           </h2>
           <p className="text-[15px] text-slate-600 leading-relaxed mt-4">
-            Pick your CBSE stream and the major you're aiming for. This is the same engine your full plan uses. The
-            full plan also uses your questionnaire, available hours and exam date.
+            Pick your CBSE stream and target major. Same engine as your full plan, which also weighs your
+            personality, weekly hours and exam date.
           </p>
 
           <div className="mt-7 space-y-5">
@@ -47,10 +47,12 @@ export function TryIt() {
                 {STREAMS.map((s) => (
                   <button
                     key={s}
+                    type="button"
+                    aria-pressed={stream === s}
                     onClick={() => setStream(s)}
-                    className={'rounded-full px-4 py-2 text-[13.5px] font-medium border-2 transition-colors ' + (stream === s ? 'bg-leaf-600 border-leaf-600 text-white' : 'bg-white border-line-2 text-slate-700 hover:border-leaf-300')}
+                    className={'rounded-full px-4 py-2 text-[13.5px] font-medium border-2 transition-colors ' + (stream === s ? 'bg-leaf-600 border-leaf-600 text-white' : 'bg-canvas border-line-2 text-slate-700 hover:border-leaf-300')}
                   >
-                    {s.replace('Science ', '')}
+                    {s.replace('Science ', '').replace(/[()]/g, '')}
                   </button>
                 ))}
               </div>
@@ -61,8 +63,10 @@ export function TryIt() {
                 {MAJORS.map((m) => (
                   <button
                     key={m}
+                    type="button"
+                    aria-pressed={major === m}
                     onClick={() => setMajor(m)}
-                    className={'rounded-full px-4 py-2 text-[13.5px] font-medium border-2 transition-colors ' + (major === m ? 'bg-ink border-ink text-white' : 'bg-white border-line-2 text-slate-700 hover:border-slate-400')}
+                    className={'rounded-full px-4 py-2 text-[13.5px] font-medium border-2 transition-colors ' + (major === m ? 'bg-ink border-ink text-paper' : 'bg-canvas border-line-2 text-slate-700 hover:border-slate-400')}
                   >
                     {m}
                   </button>
@@ -72,24 +76,25 @@ export function TryIt() {
           </div>
         </div>
 
-        <div className="lg:col-span-7">
-          <div className="rounded-3xl bg-gradient-to-br from-leaf-50 to-amber-50 border border-leaf-100 p-6 sm:p-8">
-            <div className="flex items-center justify-between mb-5">
-              <p className="font-jakarta font-bold text-ink text-[18px]">Your nearly-free APs</p>
-              <span className="text-[11px] font-semibold text-slate-500 bg-white rounded-full px-2.5 py-1 border border-line">Illustrative preview</span>
+        <div className="lg:col-span-7 min-w-0">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-leaf-50 to-violet-50 border border-leaf-100 p-6 sm:p-8">
+            <div className="absolute -right-12 -top-12 w-44 h-44 rounded-full bg-leaf-400/15 blur-3xl pointer-events-none" aria-hidden />
+            <div className="relative flex flex-wrap items-center justify-between gap-2 mb-5">
+              <p className="font-jakarta font-bold text-ink text-[18px]">APs that fit on top of your boards</p>
+              <span className="text-[11px] font-semibold text-slate-500 bg-canvas rounded-full px-2.5 py-1 border border-line">Illustrative preview</span>
             </div>
             {top.length === 0 && (
-              <p className="bg-white rounded-2xl p-4 border border-line text-[13.5px] text-slate-600">
-                No low-cost APs stand out for this combination. A mentor consult can help you weigh it up.
+              <p className="relative bg-canvas rounded-2xl p-4 border border-line text-[13.5px] text-slate-600">
+                No AP stands out as a light add-on for this combination. A mentor consult can help you weigh it up.
               </p>
             )}
-            <ol className="space-y-3">
+            <ol className="relative space-y-3">
               {top.map((i, idx) => (
-                <li key={i.course.id} className="bg-white rounded-2xl p-4 border border-line flex items-center gap-4 shadow-sm">
+                <li key={`${stream}-${major}-${i.course.id}`} className="animate-slide-right bg-canvas rounded-2xl p-4 border border-line flex items-center gap-3 sm:gap-4 shadow-sm" style={{ animationDelay: `${idx * 0.08}s` }}>
                   <span className="w-9 h-9 rounded-full bg-leaf-600 text-white font-jakarta font-bold flex items-center justify-center shrink-0">{idx + 1}</span>
                   <div className="flex-1 min-w-0">
-                    <p className="font-jakarta font-bold text-ink text-[15.5px]">{i.course.name}</p>
-                    <p className="text-[12.5px] text-slate-500 truncate">{i.rationale}</p>
+                    <p className="font-jakarta font-bold text-ink text-[15.5px] break-words">{i.course.name}</p>
+                    <p className="text-[12.5px] text-slate-500 line-clamp-2">{i.rationale}</p>
                   </div>
                   <div className="text-right shrink-0">
                     <span className={`text-[11px] font-semibold border rounded-full px-2 py-0.5 ${BAND_STYLE[i.band]}`}>{i.band}</span>
@@ -99,14 +104,14 @@ export function TryIt() {
               ))}
             </ol>
             {skip && (
-              <p className="mt-4 text-[13px] text-slate-600 flex items-start gap-2">
-                <span className="material-symbols-outlined text-[18px] text-slate-400">block</span>
+              <p className="relative mt-4 text-[13px] text-slate-600 flex items-start gap-2">
+                <span aria-hidden="true" className="material-symbols-outlined text-[18px] text-slate-400">block</span>
                 <span><span className="font-semibold text-ink">{skip.course.name}</span>: skip for now. {skip.reason}</span>
               </p>
             )}
-            <Link to="/signup?role=student&segment=india" className="mt-6 inline-flex items-center gap-2 bg-ink text-white text-[14px] font-semibold rounded-full px-5 py-3 hover:bg-ink-soft transition-colors">
+            <Link to="/signup?role=student&segment=india" className="relative mt-6 inline-flex items-center gap-2 bg-leaf-600 text-white text-[14px] font-semibold rounded-full px-5 py-3 hover:brightness-110 hover:shadow-glow transition-colors">
               Get my full plan, free
-              <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+              <span aria-hidden="true" className="material-symbols-outlined text-[18px]">arrow_forward</span>
             </Link>
           </div>
         </div>

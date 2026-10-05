@@ -132,7 +132,7 @@ export function MentorDashboard({ user }: { user: User }) {
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-6 min-w-0">
           <Panel title="Requests for you">
             {requests.length + open.length === 0 ? (
               <p className="text-[13px] text-slate-500">No requests right now. You'll see new matches here.</p>
@@ -186,7 +186,7 @@ export function MentorDashboard({ user }: { user: User }) {
           </Panel>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-6 min-w-0">
           <Panel title="Subjects you mentor">
             <div className="flex flex-wrap gap-1.5">
               {(user.subjects.length ? user.subjects : ['Add subjects in your application']).map((s) => (

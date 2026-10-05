@@ -8,6 +8,19 @@ export const SEGMENT_LABEL: Record<Segment, string> = {
   sgus: 'Singapore · US track',
 };
 
+/**
+ * Where a student wants to apply. US and UK admissions read courses differently, so plans and
+ * copy branch on this and never mix the two.
+ */
+export type TargetCountry = 'US' | 'UK' | 'Canada' | 'Other';
+
+export const COUNTRY_LABEL: Record<TargetCountry, string> = {
+  US: 'United States',
+  UK: 'United Kingdom',
+  Canada: 'Canada',
+  Other: 'Somewhere else / not sure',
+};
+
 /** India intake (board → AP overlap plan). */
 export interface IndiaIntake {
   board: 'CBSE' | 'ICSE' | 'State board' | 'Other';
@@ -17,6 +30,8 @@ export interface IndiaIntake {
   elective: BoardElective;
   targetMajors: string[];
   targetColleges: string[];
+  /** Absent on accounts created before target countries were asked; read as ['US']. */
+  targetCountries?: TargetCountry[];
 }
 
 export type BoardElective =
@@ -27,7 +42,18 @@ export type BoardElective =
   | 'Physical Education'
   | 'Other / none';
 
-export type Curriculum = 'IB' | 'A-Level' | 'AP';
+/**
+ * SG/US base curriculum: the school system the student is enrolled in. AP is not a curriculum
+ * here. A US high school offers AP classes inside it, and IB / A-Level students can add AP
+ * exams on top (`SgUsIntake.apAddOns`). Stored accounts with the legacy value 'AP' read as 'US'.
+ */
+export type Curriculum = 'IB' | 'A-Level' | 'US';
+
+export const CURRICULUM_LABEL: Record<Curriculum, string> = {
+  IB: 'IB Diploma',
+  'A-Level': 'A-Levels',
+  US: 'US high school',
+};
 
 export type CourseLevel = 'HL' | 'SL' | 'A-Level' | 'AS' | 'AP' | 'Honors' | 'Standard';
 
@@ -43,6 +69,9 @@ export interface SgUsIntake {
   courses: CourseChoice[];
   targetMajors: string[];
   targetColleges: string[];
+  targetCountries?: TargetCountry[];
+  /** IB / A-Level students: AP exams they're considering on top of school (ids from data/apInfo). */
+  apAddOns?: string[];
   isAthlete: boolean;
   sport: string;
   trainingHoursPerWeek: number;

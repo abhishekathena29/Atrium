@@ -21,7 +21,7 @@ function Hello({ name, children }: { name: string; children: React.ReactNode }) 
 
 function StepCard({ n, icon, title, body, time, tone }: { n: number; icon: string; title: string; body: string; time: string; tone: string }) {
   return (
-    <li className="bg-white rounded-3xl border border-line p-5 flex items-start gap-4">
+    <li className="bg-canvas rounded-3xl border border-line p-5 flex items-start gap-4">
       <span className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${tone}`}>
         <span className="material-symbols-outlined text-[24px]">{icon}</span>
       </span>
@@ -43,30 +43,32 @@ function StudentWelcome({ user }: { user: User }) {
 
   function go() {
     if (!user.welcomedAt) updateUser({ welcomedAt: new Date().toISOString() });
-    navigate(s.intakeDone ? '/questionnaire' : '/onboarding');
+    navigate(s.quizDone ? '/onboarding' : '/questionnaire');
   }
 
   return (
     <>
       <Hello name={user.name}>
-        Let's build your free {user.segment === 'india' ? 'AP plan' : 'course-load plan'}. It takes about 10 minutes, and
-        everything saves as you go.
+        Let's build your free {user.segment === 'india' ? 'AP plan' : 'course plan'}. About 10 minutes. No right or
+        wrong answers, and everything saves as you go.
       </Hello>
 
-      <ol className="mt-10 space-y-3">
-        <StepCard n={1} icon="badge" tone="bg-sky-100 text-sky-700" title="About you"
-          body={user.segment === 'india' ? 'Your board, stream, class and target majors.' : 'Your curriculum, subjects, targets and training hours.'} time="2 min" />
-        <StepCard n={2} icon="psychology" tone="bg-violet-100 text-violet-700" title="Questionnaire"
-          body="How you like to work, what interests you, and how much time you have." time="8 min" />
+      <ol className="mt-10 space-y-3 stagger">
+        <StepCard n={1} icon="psychology" tone="bg-violet-100 text-violet-700" title="About you"
+          body="Quick tap-to-answer questions about how you work and what you enjoy. Nothing about school yet." time="6 min" />
+        <StepCard n={2} icon="school" tone="bg-sky-100 text-sky-700" title="Your studies"
+          body={user.segment === 'india'
+            ? 'Your board and class, any APs you’re curious about, where you want to apply, and how busy your week is.'
+            : 'Your school system, your subjects, any APs on top, where you want to apply, and how busy your week is.'} time="4 min" />
         <StepCard n={3} icon="route" tone="bg-leaf-100 text-leaf-700" title="Your plan"
-          body="A reasoned plan, instantly. Then check it with a mentor for free." time="Instant" />
+          body="Which APs, how many, how hard, and why. Then check it with a mentor for free." time="Instant" />
       </ol>
 
-      <div className="mt-6 rounded-3xl bg-amber-50 border border-amber-100 p-5 flex items-center gap-4">
-        <span className="material-symbols-outlined text-amber-600 text-[30px]" style={{ fontVariationSettings: "'FILL' 1" }}>emoji_events</span>
+      <div className="mt-6 rounded-3xl bg-amber-50 border border-amber-100 p-5 flex items-center gap-4 animate-fade-up">
+        <span className="material-symbols-outlined text-amber-600 text-[30px] animate-wiggle" style={{ fontVariationSettings: "'FILL' 1" }}>emoji_events</span>
         <p className="text-[14px] text-amber-900">
-          You'll unlock your first two awards, <span className="font-semibold">First step</span> and{' '}
-          <span className="font-semibold">Know yourself</span>, along the way.
+          Every section you finish earns XP. You'll unlock <span className="font-semibold">Know yourself</span>,{' '}
+          <span className="font-semibold">Curious mind</span> and <span className="font-semibold">First step</span> before your plan appears.
         </p>
       </div>
 
@@ -75,7 +77,7 @@ function StudentWelcome({ user }: { user: User }) {
           {started ? 'Continue where I left off' : "Let's go"}
           <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
         </button>
-        <Link to="/dashboard" className="text-[13.5px] font-semibold text-slate-500 hover:text-ink">I'll do this later</Link>
+        <Link to="/dashboard" onClick={() => { if (!user.welcomedAt) updateUser({ welcomedAt: new Date().toISOString() }); }} className="text-[13.5px] font-semibold text-slate-500 hover:text-ink">I'll do this later</Link>
       </div>
     </>
   );
@@ -131,7 +133,7 @@ function ParentWelcome({ user }: { user: User }) {
           { icon: 'verified', t: 'Approve consults', b: 'Paid consults only go ahead after you approve and pay.' },
           { icon: 'local_fire_department', t: 'Cheer them on', b: `Follow ${first}'s study streak, awards and results.` },
         ].map((c) => (
-          <li key={c.t} className="bg-white rounded-3xl border border-line p-5 text-center">
+          <li key={c.t} className="bg-canvas rounded-3xl border border-line p-5 text-center">
             <span className="mx-auto w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center">
               <span className="material-symbols-outlined text-[24px]">{c.icon}</span>
             </span>

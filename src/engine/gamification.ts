@@ -7,6 +7,7 @@
 
 import { listUsers } from '../auth/AuthContext';
 import type { User } from '../auth/types';
+import { OCEAN_ITEMS, RIASEC_ITEMS } from '../data/questionnaire';
 import {
   getUnitProgress,
   listConsults,
@@ -14,11 +15,27 @@ import {
   listStudyLogs,
   type StudyLog,
 } from '../store/db';
-import type { StudentState } from './studentState';
+import { intakeOf, type StudentState } from './studentState';
+
+/** Setup sections, in flow order. Each earns XP once, the moment it's complete. */
+export const SETUP_XP = {
+  personality: 40,
+  interests: 40,
+  studies: 25,
+  goals: 25,
+  week: 20,
+  complete: 50,
+} as const;
+
+export type SetupSection = keyof typeof SETUP_XP;
 
 export const XP_RULES = [
-  { action: 'Finish onboarding', xp: 50 },
-  { action: 'Complete the questionnaire', xp: 100 },
+  { action: 'Personality questions done', xp: SETUP_XP.personality },
+  { action: 'Interest questions done', xp: SETUP_XP.interests },
+  { action: 'Your studies filled in', xp: SETUP_XP.studies },
+  { action: 'Goals set (majors + countries)', xp: SETUP_XP.goals },
+  { action: 'Your week filled in', xp: SETUP_XP.week },
+  { action: 'Profile 100% complete', xp: SETUP_XP.complete },
   { action: 'Study time logged', xp: 1, per: 'per 3 minutes' },
   { action: 'Plan unit ticked off', xp: 15, per: 'per unit' },
   { action: 'Consult requested', xp: 40, per: 'per consult' },
@@ -71,6 +88,57 @@ export interface Gamification {
   awards: Award[];
   /** 12 weeks × 7 days, Monday-first, oldest week first. */
   heatmap: DayCell[][];
+}
+
+export interface CompletionItem {
+  id: string;
+  label: string;
+  done: boolean;
+  /** Where to go to complete it. */
+  to: string;
+}
+
+/** Which setup sections are complete, read from what the student actually saved. */
+export function setupSections(user: User, state: StudentState): Record<SetupSection, boolean> {
+  const answers = state.progress?.answers ?? {};
+  const career = state.progress?.career ?? {};
+  const intake = intakeOf(user);
+  const draft = state.progress?.draft;
+  const reached = draft?.segment === user.segment ? draft.reached : 0;
+  const personality = OCEAN_ITEMS.every((i) => answers[i.id]);
+  const interests = RIASEC_ITEMS.every((i) => answers[i.id]);
+  // A section counts once it's saved: in the finished intake, or in the onboarding draft.
+  const studies = state.intakeDone || reached >= 2;
+  const goals = (!!intake?.targetMajors.length && !!intake?.targetCountries?.length) ||
+    (reached >= 4 && !!career.targetMajors?.length && !!draft?.countries.length);
+  const week = career.currentLoadHours !== undefined && (user.segment === 'sgus' || career.extraHoursPerWeek !== undefined);
+  return { personality, interests, studies, goals, week, complete: personality && interests && studies && goals && week };
+}
+
+/**
+ * Profile completion checklist (dashboard meter). The % covers the five setup sections only, so
+ * 100% means the same thing as the "Profile complete" XP and the Mapmaker award. The optional
+ * extras are listed but not counted.
+ */
+export function profileCompletion(user: User, state: StudentState): { pct: number; items: CompletionItem[] } {
+  const s = setupSections(user, state);
+  const intake = intakeOf(user);
+  const parentLinked = listUsers((u) => u.role === 'parent' && u.linkedStudentId === user.id).length > 0;
+  const items: CompletionItem[] = [
+    { id: 'personality', label: 'How you work (personality)', done: s.personality, to: '/questionnaire' },
+    { id: 'interests', label: 'What you enjoy (interests)', done: s.interests, to: '/questionnaire' },
+    { id: 'studies', label: user.segment === 'india' ? 'Board, stream and class' : 'School system and subjects', done: s.studies, to: '/onboarding' },
+    { id: 'goals', label: 'Majors and target countries', done: s.goals, to: '/onboarding' },
+    { id: 'week', label: 'How busy your week is', done: s.week, to: '/onboarding' },
+    { id: 'colleges', label: 'Dream universities (optional)', done: !!intake?.targetColleges.length, to: '/onboarding' },
+    { id: 'parent', label: 'Parent linked (optional)', done: parentLinked, to: '/dashboard' },
+  ];
+  const required = items.filter((i) => !i.label.includes('optional'));
+  return { pct: Math.round((required.filter((i) => i.done).length / required.length) * 100), items };
+}
+
+export function setupXp(sections: Record<SetupSection, boolean>): number {
+  return (Object.keys(SETUP_XP) as SetupSection[]).reduce((sum, k) => sum + (sections[k] ? SETUP_XP[k] : 0), 0);
 }
 
 export function fmtMinutes(min: number) {
@@ -177,9 +245,12 @@ export function computeGamification(user: User, state: StudentState, now = new D
     logs.filter((l) => l.date >= dayKey(monday)).map((l) => l.subject),
   ).size;
 
+  const sections = setupSections(user, state);
   const awards: Award[] = [
-    { id: 'first-step', title: 'First step', description: 'Finish onboarding', icon: 'footprint', tone: 'sky', earned: state.intakeDone },
-    { id: 'know-yourself', title: 'Know yourself', description: 'Complete the questionnaire', icon: 'psychology', tone: 'violet', earned: !!state.profile },
+    { id: 'know-yourself', title: 'Know yourself', description: 'Answer the personality questions', icon: 'psychology', tone: 'violet', earned: sections.personality },
+    { id: 'curious-mind', title: 'Curious mind', description: 'Answer the interest questions', icon: 'explore', tone: 'sky', earned: sections.interests },
+    { id: 'first-step', title: 'First step', description: 'Tell us what you study', icon: 'footprint', tone: 'emerald', earned: state.intakeDone },
+    { id: 'mapmaker', title: 'Mapmaker', description: 'Complete your whole profile', icon: 'map', tone: 'amber', earned: sections.complete },
     { id: 'first-session', title: 'Warm-up', description: 'Log your first study session', icon: 'timer', tone: 'emerald', earned: logs.length > 0 },
     { id: 'streak-3', title: 'On a roll', description: '3-day study streak', icon: 'local_fire_department', tone: 'orange', earned: longest >= 3, progress: `${Math.min(longest, 3)} / 3 days` },
     { id: 'streak-7', title: 'Week warrior', description: '7-day study streak', icon: 'local_fire_department', tone: 'orange', earned: longest >= 7, progress: `${Math.min(longest, 7)} / 7 days` },
@@ -198,8 +269,7 @@ export function computeGamification(user: User, state: StudentState, now = new D
 
   const earnedCount = awards.filter((a) => a.earned).length;
   const xp =
-    (state.intakeDone ? 50 : 0) +
-    (state.profile ? 100 : 0) +
+    setupXp(sections) +
     Math.floor(totalMinutes / 3) +
     unitsDone * 15 +
     requested * 40 +

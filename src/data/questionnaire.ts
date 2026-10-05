@@ -17,6 +17,8 @@ export interface OceanItem {
   text: string;
   trait: OceanTrait;
   reverse: boolean;
+  /** Plain-English gloss for idioms, for students reading in a second language. */
+  hint?: string;
 }
 
 export interface RiasecItem {
@@ -43,25 +45,25 @@ export const RIASEC_LABEL: Record<RiasecType, string> = {
 };
 
 export const OCEAN_ITEMS: OceanItem[] = [
-  { id: 'e1', text: 'I am the life of the party.', trait: 'E', reverse: false },
-  { id: 'a1', text: "I sympathise with others' feelings.", trait: 'A', reverse: false },
+  { id: 'e1', text: 'I am the life of the party.', trait: 'E', reverse: false, hint: 'The one who gets everyone talking and having fun.' },
+  { id: 'a1', text: "I sympathise with others' feelings.", trait: 'A', reverse: false, hint: 'You care when others are sad or hurt.' },
   { id: 'c1', text: 'I get chores done right away.', trait: 'C', reverse: false },
-  { id: 'n1', text: 'I have frequent mood swings.', trait: 'N', reverse: false },
-  { id: 'o1', text: 'I have a vivid imagination.', trait: 'O', reverse: false },
+  { id: 'n1', text: 'I have frequent mood swings.', trait: 'N', reverse: false, hint: 'Your mood changes a lot, quickly.' },
+  { id: 'o1', text: 'I have a vivid imagination.', trait: 'O', reverse: false, hint: 'You easily picture things in your head.' },
   { id: 'e2', text: "I don't talk a lot.", trait: 'E', reverse: true },
   { id: 'a2', text: "I am not interested in other people's problems.", trait: 'A', reverse: true },
   { id: 'c2', text: 'I often forget to put things back in their proper place.', trait: 'C', reverse: true },
-  { id: 'n2', text: 'I am relaxed most of the time.', trait: 'N', reverse: true },
-  { id: 'o2', text: 'I am not interested in abstract ideas.', trait: 'O', reverse: true },
+  { id: 'n2', text: 'I am relaxed most of the time.', trait: 'N', reverse: true, hint: 'Calm, not stressed.' },
+  { id: 'o2', text: 'I am not interested in abstract ideas.', trait: 'O', reverse: true, hint: 'Ideas like justice, infinity or theories.' },
   { id: 'e3', text: 'I talk to a lot of different people at gatherings.', trait: 'E', reverse: false },
   { id: 'a3', text: "I feel others' emotions.", trait: 'A', reverse: false },
   { id: 'c3', text: 'I like order.', trait: 'C', reverse: false },
   { id: 'n3', text: 'I get upset easily.', trait: 'N', reverse: false },
-  { id: 'o3', text: 'I have difficulty understanding abstract ideas.', trait: 'O', reverse: true },
-  { id: 'e4', text: 'I keep in the background.', trait: 'E', reverse: true },
+  { id: 'o3', text: 'I have difficulty understanding abstract ideas.', trait: 'O', reverse: true, hint: 'Ideas like justice, infinity or theories.' },
+  { id: 'e4', text: 'I keep in the background.', trait: 'E', reverse: true, hint: 'You stay quiet and let others take the lead.' },
   { id: 'a4', text: 'I am not really interested in others.', trait: 'A', reverse: true },
-  { id: 'c4', text: 'I make a mess of things.', trait: 'C', reverse: true },
-  { id: 'n4', text: 'I seldom feel blue.', trait: 'N', reverse: true },
+  { id: 'c4', text: 'I make a mess of things.', trait: 'C', reverse: true, hint: 'Things often end up messy or go wrong.' },
+  { id: 'n4', text: 'I seldom feel blue.', trait: 'N', reverse: true, hint: 'Seldom = rarely. Feel blue = feel sad.' },
   { id: 'o4', text: 'I do not have a good imagination.', trait: 'O', reverse: true },
 ];
 
@@ -92,6 +94,24 @@ export const LIKERT_AGREE = [
   'Neither',
   'Moderately accurate',
   'Very accurate',
+];
+
+/** Friendlier labels for the quiz UI; same 1–5 scoring as LIKERT_AGREE. */
+export const QUIZ_AGREE = [
+  { label: 'Not me at all', emoji: '🙅' },
+  { label: 'Not really me', emoji: '🤔' },
+  { label: 'In between', emoji: '😐' },
+  { label: 'Sort of me', emoji: '🙂' },
+  { label: 'Totally me', emoji: '🤩' },
+];
+
+/** Same 1–5 scoring as LIKERT_LIKE. */
+export const QUIZ_LIKE = [
+  { label: 'No way', emoji: '😖' },
+  { label: 'Not for me', emoji: '😕' },
+  { label: 'Not sure', emoji: '🤷' },
+  { label: 'Sounds fun', emoji: '😊' },
+  { label: 'Love it', emoji: '😍' },
 ];
 
 export const LIKERT_LIKE = ['Strongly dislike', 'Dislike', 'Unsure', 'Like', 'Strongly like'];

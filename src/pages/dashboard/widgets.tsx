@@ -20,7 +20,7 @@ export function PageHeader({ eyebrow, title, subtitle, action }: {
 
 export function StatCard({ value, label, icon }: { value: string; label: string; icon: string }) {
   return (
-    <div className="bg-white border border-line rounded-2xl p-5">
+    <div className="bg-canvas border border-line rounded-2xl p-5">
       <span className="w-9 h-9 rounded-xl bg-leaf-50 text-leaf-600 flex items-center justify-center">
         <span className="material-symbols-outlined text-[20px]">{icon}</span>
       </span>
@@ -36,7 +36,7 @@ export function Panel({ title, action, children }: {
   children: ReactNode;
 }) {
   return (
-    <section className="bg-white border border-line rounded-3xl">
+    <section className="bg-canvas border border-line rounded-3xl">
       <header className="flex items-center justify-between gap-3 px-6 pt-5 pb-1">
         <h2 className="font-jakarta font-bold text-ink text-[17px]">{title}</h2>
         {action}

@@ -3,6 +3,7 @@
  * Replace with a real backend before any real minor uses the platform (M10a).
  */
 
+import type { IndiaIntake, Segment, SgUsIntake, TargetCountry } from '../auth/types';
 import type { OceanTrait, RiasecType } from '../data/questionnaire';
 
 function read<T>(key: string, fallback: T): T {
@@ -35,10 +36,26 @@ export interface CareerLayer {
   targetColleges: string[];
   /** Hours per week already committed outside school (coaching, tuition). */
   currentLoadHours: number;
+  /** Clubs, competitions, volunteering, non-competitive sport. Absent on older profiles. */
+  activityHours?: number;
   /** India: hours per week the student can add for AP self-study. */
   extraHoursPerWeek: number;
-  /** Weeks until the AP exam session / decision window. */
+  /** Weeks until the AP exam session. Always recomputed from `examDate` when that is set. */
   weeksToExam: number;
+  /** The May exam session the student is aiming for (ISO date). Absent on older profiles. */
+  examDate?: string;
+}
+
+/** Unfinished "Your studies" wizard, saved on every Continue so the student can resume. */
+export interface OnboardingDraft {
+  segment: Segment;
+  india?: IndiaIntake;
+  sgus?: SgUsIntake;
+  countries: TargetCountry[];
+  colleges: string;
+  wantsAps: 'yes' | 'no' | 'unsure';
+  /** Furthest step completed (1-based count of steps passed). */
+  reached: number;
 }
 
 export interface QuestionnaireProgress {
@@ -49,6 +66,7 @@ export interface QuestionnaireProgress {
   startedAt: string;
   updatedAt: string;
   completedAt?: string;
+  draft?: OnboardingDraft;
 }
 
 export interface Profile {
@@ -256,4 +274,67 @@ export function toggleUnit(userId: string, key: string) {
   const current = all[userId] ?? [];
   all[userId] = current.includes(key) ? current.filter((k) => k !== key) : [...current, key];
   write(UNITS_KEY, all);
+}
+
+/* ------------------------------------------------------------------ */
+/* M9 AI layer: cached advice + chat history                           */
+/* ------------------------------------------------------------------ */
+
+/** Layer 1 output. Always shown labelled "AI-generated", next to the rule-based plan. */
+export interface AiPick {
+  /** Candidate id from the student's AI context (AP id, or `school:<name>` for SG/US school subjects). */
+  courseId: string;
+  course: string;
+  /** Difficulty label from Atrium's data (never the model's own rating), e.g. "Demanding (4/5)". */
+  difficulty: string;
+  verdict: 'take' | 'consider' | 'skip';
+  why: string[];
+}
+
+/** One note per target country. US and UK notes are always separate entries. */
+export interface AiCountryNote {
+  country: string;
+  note: string;
+}
+
+export interface AiAdvice {
+  /** Hash of the student context the advice was generated from; stale when it changes. */
+  contextKey: string;
+  summary: string;
+  recommendedCount: number;
+  countReason: string;
+  picks: AiPick[];
+  balanceNote: string;
+  countryNotes: AiCountryNote[];
+  watchOuts: string[];
+  generatedAt: string;
+}
+
+export interface ChatTurn {
+  role: 'user' | 'assistant';
+  text: string;
+  at: string;
+}
+
+const AI_ADVICE_KEY = 'atrium.aiAdvice';
+const CHAT_KEY = 'atrium.chat';
+
+export function getAiAdvice(userId: string): AiAdvice | null {
+  return read<Record<string, AiAdvice>>(AI_ADVICE_KEY, {})[userId] ?? null;
+}
+
+export function saveAiAdvice(userId: string, advice: AiAdvice) {
+  const all = read<Record<string, AiAdvice>>(AI_ADVICE_KEY, {});
+  all[userId] = advice;
+  write(AI_ADVICE_KEY, all);
+}
+
+export function getChat(userId: string): ChatTurn[] {
+  return read<Record<string, ChatTurn[]>>(CHAT_KEY, {})[userId] ?? [];
+}
+
+export function saveChat(userId: string, turns: ChatTurn[]) {
+  const all = read<Record<string, ChatTurn[]>>(CHAT_KEY, {});
+  all[userId] = turns.slice(-60);
+  write(CHAT_KEY, all);
 }

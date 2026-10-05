@@ -1,77 +1,87 @@
 <!doctype html>
-<html lang="en" class="light">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0B1120" />
     <title>Atrium — AP & Course-Load Selection with Mentor Validation</title>
     <meta name="description" content="A free, reasoned plan for which APs to self-study (India) or which course load to take (Singapore · US track), validated by a vetted mentor." />
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block"
       rel="stylesheet"
     />
     <script id="tailwind-config">
+      // On a dark page, a hue's light shades (50-300) become dark tints of it and its dark
+      // shades (700-900) become light tints, so existing "bg-x-50 text-x-800" badges stay legible.
+      const BG = '#0B1120';
+      const rgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+      const mix = (a, b, t) =>
+        '#' + rgb(a).map((v, i) => Math.round(v + (rgb(b)[i] - v) * t).toString(16).padStart(2, '0')).join('');
+      const tone = (c400, c500, c600) => ({
+        50: mix(BG, c500, 0.1),
+        100: mix(BG, c500, 0.18),
+        200: mix(BG, c500, 0.3),
+        300: mix(BG, c500, 0.5),
+        400: c400,
+        500: c500,
+        600: c600,
+        700: mix(c400, '#FFFFFF', 0.2),
+        800: mix(c400, '#FFFFFF', 0.4),
+        900: mix(c400, '#FFFFFF', 0.6),
+      });
       tailwind.config = {
         darkMode: 'class',
         theme: {
           extend: {
             colors: {
-              paper: '#F7F4EE',
-              'paper-2': '#EFEAE0',
-              canvas: '#FFFFFF',
-              ink: '#0E1726',
-              'ink-soft': '#1F2A3D',
+              // Dark "study HUD" theme. Neutral tokens keep their names (ink = main text,
+              // paper = page background, canvas = card surface) but hold dark-theme values.
+              paper: '#0B1120',
+              'paper-2': '#0E1528',
+              canvas: '#121A2E',
+              ink: '#E8EDF7',
+              'ink-soft': '#C7D0E0',
+              'hero-1': '#0F3B2A',
+              'hero-2': '#121A3A',
               slate: {
-                50: '#F5F6F8',
-                100: '#E9ECF1',
-                200: '#D6DBE3',
-                300: '#B7BFCB',
-                400: '#8A95A6',
-                500: '#5E6A7E',
-                600: '#404B5E',
-                700: '#2A3447',
-                800: '#1A2233',
-                900: '#0E1726',
+                50: '#141C31',
+                100: '#1A2440',
+                200: '#25314F',
+                300: '#3A4766',
+                400: '#7482A0',
+                500: '#8E9AB3',
+                600: '#A9B3C8',
+                700: '#C4CCDB',
+                800: '#DCE2EC',
+                900: '#EEF2F8',
               },
-              bronze: {
-                50: '#FBF5EC',
-                100: '#F2E3CB',
-                200: '#E5C599',
-                300: '#D6A464',
-                400: '#C28A41',
-                500: '#A8722E',
-                600: '#875A24',
-                700: '#65431D',
-              },
-              leaf: {
-                50: '#F1F8EF',
-                100: '#DDEFD8',
-                200: '#BCDFB2',
-                300: '#8FC784',
-                400: '#62AB57',
-                500: '#3F8F3A',
-                600: '#2F7430',
-                700: '#275C29',
-                800: '#214A24',
-                900: '#1B3D1F',
-              },
-              accent: '#A8722E',
-              'accent-soft': '#F2E3CB',
-              line: '#E2DED4',
-              'line-2': '#D6D2C6',
+              leaf: tone('#4ADE80', '#22C55E', '#16A34A'),
+              emerald: tone('#34D399', '#10B981', '#059669'),
+              amber: tone('#FBBF24', '#F59E0B', '#D97706'),
+              sky: tone('#38BDF8', '#0EA5E9', '#0284C7'),
+              violet: tone('#A78BFA', '#8B5CF6', '#7C3AED'),
+              rose: tone('#FB7185', '#F43F5E', '#E11D48'),
+              red: tone('#F87171', '#EF4444', '#DC2626'),
+              orange: tone('#FB923C', '#F97316', '#EA580C'),
+              teal: tone('#2DD4BF', '#14B8A6', '#0D9488'),
+              signal: '#A78BFA',
+              accent: '#4ADE80',
+              'accent-soft': '#123524',
+              line: '#1E2A44',
+              'line-2': '#2A3858',
             },
             fontFamily: {
-              serif: ['Fraunces', 'Georgia', 'serif'],
               sans: ['Inter', 'system-ui', 'sans-serif'],
-              display: ['Fraunces', 'Georgia', 'serif'],
               jakarta: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+              hud: ['"Space Grotesk"', 'Inter', 'system-ui', 'sans-serif'],
             },
             fontSize: {
               'display-2xl': ['72px', { lineHeight: '1.05', letterSpacing: '-0.02em', fontWeight: '500' }],
@@ -92,8 +102,9 @@
               '2xl': '1.5rem',
             },
             boxShadow: {
-              card: '0 1px 2px rgba(14,23,38,0.04), 0 8px 24px -12px rgba(14,23,38,0.10)',
-              elev: '0 4px 12px rgba(14,23,38,0.06), 0 24px 48px -20px rgba(14,23,38,0.14)',
+              card: 'inset 0 1px 0 rgba(255,255,255,0.04), 0 10px 30px -14px rgba(0,0,0,0.7)',
+              elev: 'inset 0 1px 0 rgba(255,255,255,0.05), 0 24px 48px -20px rgba(0,0,0,0.8), 0 0 0 1px rgba(74,222,128,0.08)',
+              glow: '0 0 0 1px rgba(74,222,128,0.35), 0 8px 24px -8px rgba(34,197,94,0.6)',
             },
           },
         },

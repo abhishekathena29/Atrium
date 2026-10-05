@@ -52,7 +52,7 @@ export function Progress() {
     const after = computeGamification(user!, getStudentState(user!));
     const fresh = after.awards.filter((a) => a.earned && !before.includes(a.id));
     setFlash(
-      `+${Math.floor(minutes / 3)} XP` +
+      `+${after.xp - g.xp} XP` +
         (fresh.length ? ` · New award: ${fresh.map((a) => a.title).join(', ')}!` : '') +
         (after.streak > g.streak ? ` · Streak ${after.streak} 🔥` : ''),
     );
@@ -180,7 +180,7 @@ export function Progress() {
           {state.loadPlan && (
             <Panel title="This week by subject">
               <ul className="space-y-3">
-                {state.loadPlan.items.map((i) => {
+                {state.loadPlan.items.filter((i) => i.action !== 'drop').map((i) => {
                   const got = weekBySubject.get(i.name) ?? 0;
                   const pct = Math.min(100, Math.round((got / (i.hours * 60)) * 100));
                   return (
@@ -207,7 +207,7 @@ export function Progress() {
           {!state.profile && (
             <p className="text-[13px] text-slate-600">
               Your weekly goal and checklist come from your plan.{' '}
-              <Link to={state.intakeDone ? '/questionnaire' : '/onboarding'} className="underline">Finish setting it up</Link> to unlock them.
+              <Link to={state.quizDone ? '/onboarding' : '/questionnaire'} className="underline">Finish setting it up</Link> to unlock them.
             </p>
           )}
         </div>

@@ -1,15 +1,21 @@
 import { useState, type FormEvent } from 'react';
 import { useAuth } from '../../auth/AuthContext';
 import { getStudentState } from '../../engine/studentState';
+import type { LoadPlanItem } from '../../engine/courseLoad';
 import { listOutcomes, makeId, saveOutcome } from '../../store/db';
 import { Checkbox, ErrorNote, Field, Select, TextArea, TextInput, btnPrimary } from '../../components/ui/Field';
 import { PageHeader, Panel } from '../dashboard/widgets';
+
+/** How a course-load item is named in reports: add-ons by name, school subjects with their level. */
+function loadLabel(i: LoadPlanItem): string {
+  return i.kind === 'addon' ? i.name : `${i.name} ${i.to}`;
+}
 
 /** Planned net-new hrs/week per subject, so reports can compare predicted vs actual. */
 function predictions(state: ReturnType<typeof getStudentState>): Record<string, number> {
   const out: Record<string, number> = {};
   state.indiaPlan?.items.forEach((i) => (out[i.course.name] = i.netNewPerWeek));
-  state.loadPlan?.items.forEach((i) => (out[`${i.name} ${i.to}`] = i.hours));
+  state.loadPlan?.items.filter((i) => i.action !== 'drop').forEach((i) => (out[loadLabel(i)] = i.hours));
   return out;
 }
 
@@ -19,7 +25,7 @@ export function Outcomes() {
   const predicted = predictions(state);
   const planned = state.indiaPlan
     ? state.indiaPlan.recommended.map((i) => i.course.name)
-    : state.loadPlan?.items.map((i) => `${i.name} ${i.to}`) ?? [];
+    : state.loadPlan?.items.filter((i) => i.action !== 'drop').map(loadLabel) ?? [];
   const options = [...new Set([...planned, ...Object.keys(predicted)])];
 
   const [, force] = useState(0);

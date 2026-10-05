@@ -16,6 +16,7 @@ import { Plan } from './pages/student/Plan';
 import { Consults } from './pages/student/Consults';
 import { Outcomes } from './pages/student/Outcomes';
 import { Progress } from './pages/student/Progress';
+import { Coach } from './pages/student/Coach';
 import { MentorApplication } from './pages/mentor/MentorApplication';
 import { Welcome } from './pages/Welcome';
 
@@ -48,11 +49,12 @@ function App() {
 
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/welcome" element={<ProtectedRoute focusStep={0}><Welcome /></ProtectedRoute>} />
-          <Route path="/onboarding" element={<ProtectedRoute roles={['student']} focusStep={1}><Onboarding /></ProtectedRoute>} />
-          <Route path="/questionnaire" element={<ProtectedRoute roles={['student']} focusStep={2}><Questionnaire /></ProtectedRoute>} />
+          <Route path="/onboarding" element={<ProtectedRoute roles={['student']} focusStep={2}><Onboarding /></ProtectedRoute>} />
+          <Route path="/questionnaire" element={<ProtectedRoute roles={['student']} focusStep={1}><Questionnaire /></ProtectedRoute>} />
           <Route path="/plan" element={<ProtectedRoute roles={['student']}><Plan /></ProtectedRoute>} />
           <Route path="/consults" element={<ProtectedRoute roles={['student']}><Consults /></ProtectedRoute>} />
           <Route path="/progress" element={<ProtectedRoute roles={['student']}><Progress /></ProtectedRoute>} />
+          <Route path="/coach" element={<ProtectedRoute roles={['student']}><Coach /></ProtectedRoute>} />
           <Route path="/outcomes" element={<ProtectedRoute roles={['student']}><Outcomes /></ProtectedRoute>} />
           <Route path="/mentor/application" element={<ProtectedRoute roles={['mentor']}><MentorApplication /></ProtectedRoute>} />
 

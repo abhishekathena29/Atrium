@@ -45,8 +45,10 @@ Status legend: `[ ]` todo · `[~]` partial / prototype-only · `[x]` done · `[-
 | Pricing (proposal) | `src/data/pricing.ts` |
 | Home page | `src/pages/Home.tsx` + `src/components/home/*` (hero, tracks, live "try it" demo, steps, motivation, subjects, parents/mentors, trust + FAQ, CTA) |
 | Gamification | `src/engine/gamification.ts` (derived XP / levels / streaks / awards / heatmap), `src/components/gamify/Gamify.tsx`, `src/pages/student/Progress.tsx` (`/progress`); study logs + unit check-offs in `src/store/db.ts` |
-| First-run flow | `src/engine/flow.ts`, `src/components/FocusLayout.tsx` (sidebar-free shell with step tracker), `src/pages/Welcome.tsx` (student / mentor / parent) |
-| Theme | `index.html`: `leaf` green palette + `font-jakarta` (Plus Jakarta Sans) for marketing headings; app screens still use Fraunces + Inter |
+| First-run flow | welcome → `/questionnaire` (About you) → `/onboarding` (Your studies) → plan. `src/engine/flow.ts`, `src/components/FocusLayout.tsx` (sidebar-free shell with step tracker), `src/pages/Welcome.tsx` (student / mentor / parent) |
+| AP + country data | `src/data/apInfo.ts` (difficulty 1–5, plain-language explainers, add-on hours; illustrative v0), `src/data/countries.ts` (US / UK / Canada guidance and the no-"requires" wording rule) |
+| AI layer (M9) | `server/ai.ts` (Anthropic calls, framework-agnostic), `server/knowledge.ts` (system knowledge built from `src/data`), `server/aiPlugin.ts` (Vite adapter for `POST /api/ai/recommend` and `/api/ai/chat`), `src/engine/aiContext.ts`, `src/lib/ai.ts`, `src/components/plan/AiAdvisor.tsx`, `src/pages/student/Coach.tsx` (`/coach`). Key in `.env.local` |
+| Theme | Dark "study HUD" theme. `index.html` holds the tokens (`paper` = page bg, `canvas` = card, `ink` = main text; hue shades 50–300 are dark tints, 700–900 light tints) and `src/index.css` the grid backdrop, glows and dark form fields. `font-jakarta` headings, `font-hud` (Space Grotesk) for small labels |
 
 ---
 
@@ -97,7 +99,7 @@ Status legend: `[ ]` todo · `[~]` partial / prototype-only · `[x]` done · `[-
 | M6 | Outcome loop | [~] | Student report (predicted vs actual) + mentor log; no analytics yet |
 | M7 | School console | [-] | Phase 3 |
 | M8 | Overlap graph | [~] | Seeded, **illustrative**; needs the manual syllabus-mapping pass |
-| M9 | AI layer | [-] | Phase 3; nothing AI-generated shown to students |
+| M9 | AI layer | [~] | Layer 1 AI plan review + Layer 2 "Ask Atrium" chat, local dev-server endpoint, labelled AI-generated, grounded in the engines (Pass 4 D) |
 | M10a | Safeguarding | [~] | Policy page, report form, guardian consent gate, vetting gate; needs real ops + backend |
 | M10b | Methodology | [x] | Every number defined with source + status |
 
@@ -196,6 +198,49 @@ Status legend: `[ ]` todo · `[~]` partial / prototype-only · `[x]` done · `[-
   - Sign in resumes any unfinished setup first, otherwise goes where the user was headed
 - [x] Student Home: a setup hero until the plan exists; then streak/level strip, one "Next up" action, plan, consults, parent code
 
+## Pass 4 (2026-10-02): stakeholder meeting feedback
+Main ask: less static and dry, more gamified and visual; recommendations must really use personality,
+workload, interests, curriculum, intended major and target country. Order: **UI + animation + gamification
++ onboarding first**, then the AI recommendation layer and chatbot.
+
+### A. UI, animation, gamification
+- [x] Dark, accent-rich theme (2026-10-01)
+- [x] Motion pass: utilities in `src/index.css` (fade-up, stagger, slide, pop, float, `lift` hover, `fill-anim`, shimmer, XP toast, confetti), all off under `prefers-reduced-motion`. Used on quiz/onboarding step transitions, plan rows, dashboard, home
+- [x] Visual elements instead of empty space: hero is an animated "Sample" card stack (no stock photo), floating icon tiles, glow blobs. No fake people
+- [x] Hero: short headline + one line + two entry cards (India / Singapore · US)
+- [x] Gamified setup: XP per section with a toast (`SETUP_XP` in `engine/gamification.ts`), "Know yourself" / "Curious mind" / "First step" / "Mapmaker" awards, profile-completion ring (`profileCompletion`), confetti + XP count-up on the plan reveal
+- [x] Student dashboard: level, streak, awards, tasks remaining (derived), recommended APs with difficulty, profile completion, goals, coming up (exam countdown, season, weekly goal)
+- [x] "Nearly-free APs" → "Free AP planner" / "APs that fit on top of your boards" everywhere; FAQ "Is Atrium a free AP course? No"
+- [x] Checked in headless Chrome at 1366 / 375 / 320 px: full India and IB journeys, onboarding resume, legacy account; no horizontal overflow, no runtime errors (2026-10-02)
+
+### B. Onboarding and curriculum model
+- [x] Reorder: `/questionnaire` is now "About you" (light personality + interests, one statement per screen, emoji scale, auto-advance, keys 1–5, idiom hints), then `/onboarding` "Your studies", then the plan
+- [x] Plain-language helpers: "What's an AP?" card, level explainers (HL/SL/AP/Honors), big tappable choices instead of dropdowns
+- [x] Base curriculum first, then APs as a separate step. SG/US systems are IB / A-Levels / US high school; IB and A-Level students pick optional AP add-ons
+- [x] Target country (US / UK / Canada / other) on the intake; plans and copy branch per country
+
+### C. Recommendation output
+- [x] Personality is visible: "How you shaped this plan" panel, quiz reveal ("You're a Builder + Investigator") with "how this shapes your plan"
+- [x] Output: which APs, how many (with a "why this many" line), difficulty per AP, hard/manageable mix under a temperament-based stretch cap, sized to workload (workload factor / ceiling)
+- [x] "Why" chips per course: major, syllabus overlap, interests, difficulty, workload
+- [x] Country notes per target country (`components/plan/CountryNotes.tsx`), never blended; no "requires" wording anywhere (plan disclaimers say so)
+- [x] AP difficulty data in `src/data/apInfo.ts`, labelled illustrative, defined on /methodology
+- [ ] Replace editorial difficulty and add-on hours with sourced values once outcome data exists
+
+### D. AI layers (M9, pulled forward from Phase 3)
+- [x] Layer 1: AI plan review (`AiAdvisor` on /plan). Structured output, picks restricted to engine candidates server-side, demanding-AP cap enforced, cached per context hash, labelled AI-generated
+- [x] Layer 2: "Ask Atrium" chat at `/coach`, streamed, grounded in `server/knowledge.ts` (built from the same data as the engines) + the student context; history in localStorage
+- [x] Runs locally via a Vite dev/preview plugin with `ANTHROPIC_API_KEY` in `.env.local` (see `.env.example`). Without a key the UI shows a "not set up" state
+- [ ] First real-key run: confirm structured output, fallbacks and streaming are accepted (only the no-key / bad-key paths are verified so far)
+- [x] AI hardening (cross-check): non-candidate picks dropped instead of failing, max_tokens/refusal handled before parsing, JSON-only + same-origin checks (415/403), clean 413, long chats and long free-text clipped, aborted requests cancel upstream, total-AP cap enforced, "requires" wording filtered server-side
+- [ ] Move `server/ai.ts` behind the main server's routes (`POST /api/ai/recommend`, `POST /api/ai/chat`), add auth + per-user rate limits
+- [ ] Review the AI prompts and a sample of outputs with the Athena team before students use it
+
+### E. Mentors, accounts, schools
+- [x] Plan page shows the ladder: 1. free plan → 2. AI follow-ups → 3. mentor (premium, `/consults?new=paid`)
+- [x] Separate student / parent / mentor journeys and dashboards; parent dashboard now shows the child's setup completion and goals
+- [ ] Keep the flow simple and professional enough for a school pitch (Mr. Munjal's institution): walk the flow end to end before the demo
+
 ## Out of scope / needs a backend
 - Real auth with hashed passwords (currently localStorage, plain text; prototype only)
 - Payments (India INR 499–1,999; SG/US USD 25–45; 20–25% take rate). The UI shows "approve & pay" with no charge.
@@ -215,3 +260,11 @@ Status legend: `[ ]` todo · `[~]` partial / prototype-only · `[x]` done · `[-
 - 2026-09-23: India "nearly free" plans never auto-recommend an AP in the None overlap band. It stays as "consider".
 - 2026-09-23: Home previews (floating cards, the motivation panel) are labelled "Sample" / "Preview". The "try it" demo runs the real engine with a neutral profile and is labelled illustrative.
 - 2026-09-23: Paid consults for under-18s wait in `awaiting_parent` until a linked parent approves. Free consults need guardian consent (or 18+) once.
+- 2026-10-02: Student flow is welcome → `/questionnaire` (About you: personality + interests only) → `/onboarding` (Your studies) → plan. Targets and workload moved from the quiz into onboarding (`progress.career`). `refreshProfile` rebuilds the profile once both are done. This supersedes the Pass 3 order.
+- 2026-10-02: AP is never a curriculum. SG/US base systems are IB / A-Level / US high school (`Curriculum` value 'AP' renamed 'US', migrated on read in `AuthContext`). IB / A-Level students add APs via `apAddOns`; add-ons unrelated to the major go first when over the ceiling, then lowest-value school levels drop, then the remaining add-ons.
+- 2026-10-02: Target countries live on the intake (`targetCountries`, read as ['US'] when absent). US and UK copy is separate in `data/countries.ts`, and nothing says a university "requires" an AP.
+- 2026-10-02: Workload factor = 1 − 0.02 × (coaching + activity hrs − 6), floor 0.6, on the India budget. Stretch caps: 2 demanding APs (difficulty ≥4) and 4 total, or 1 and 3 when N ≥ 3.5 or C < 3. US high-school AP classes over the cap that aren't central to the major move to Honors.
+- 2026-10-02: The AI runs locally through a Vite plugin so the key never reaches the browser. Model `claude-opus-5-5`, server-side refusal fallbacks on, structured output for Layer 1. The server drops any AI pick that isn't an engine candidate and enforces the demanding-AP cap. To move to the main server, mount the `server/ai.ts` functions behind the same two routes.
+- 2026-10-02: Setup XP is per section (personality 40, interests 40, studies 25, goals 25, week 20, whole profile 50), still derived. New awards: Curious mind, Mapmaker.
+- 2026-10-02 (cross-check): Always read the intake with `intakeOf(user)` (by segment), never `india ?? sgus`; a track switch in onboarding clears the other intake. The exam session is stored as `career.examDate` and weeks are recomputed live (`liveWeeksToExam`). A retaken quiz rebuilds the profile automatically. Onboarding saves a resumable `progress.draft` on every Continue, and setup XP reads it. The SG/US engine restores add-ons that fit again after dropping, and the stretch upgrade respects the demanding/total caps and IB/A-Level ≤4 top-level subjects. Profile completion % counts only the five required sections.
+- 2026-10-01: Site switched to a single dark "study HUD" theme (no light mode). Token names kept so components did not change meaning; `bg-white` became `bg-canvas`, filled-button hovers brighten and glow instead of going to a darker shade.

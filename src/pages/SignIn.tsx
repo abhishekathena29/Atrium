@@ -70,7 +70,7 @@ export function SignIn() {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full inline-flex items-center justify-center gap-2 bg-leaf-600 text-white text-[15px] font-semibold px-6 py-3.5 rounded-full hover:bg-leaf-700 transition-colors disabled:opacity-60"
+          className="w-full inline-flex items-center justify-center gap-2 bg-leaf-600 text-white text-[15px] font-semibold px-6 py-3.5 rounded-full hover:brightness-110 hover:shadow-glow transition-colors disabled:opacity-60"
         >
           {submitting ? 'Signing in…' : 'Sign in'}
           <span className="material-symbols-outlined text-[18px]">arrow_forward</span>

@@ -38,17 +38,17 @@ const columns = [
 
 export function Footer() {
   return (
-    <footer className="bg-ink text-paper">
+    <footer className="bg-paper-2 text-ink">
       <div className="max-w-7xl mx-auto px-6 lg:px-10 pt-20 pb-10">
-        <div className="grid lg:grid-cols-12 gap-12 pb-16 border-b border-slate-700">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 pb-16 border-b border-line">
           <div className="lg:col-span-4">
             <div className="flex items-center gap-2 mb-6">
               <span className="w-8 h-8 rounded-xl bg-leaf-600 flex items-center justify-center">
-                <span className="material-symbols-outlined text-white text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>school</span>
+                <span aria-hidden="true" className="material-symbols-outlined text-white text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>school</span>
               </span>
-              <span className="font-jakarta font-extrabold text-paper text-[22px] tracking-tight">Atrium</span>
+              <span className="font-jakarta font-extrabold text-ink text-[22px] tracking-tight">Atrium</span>
             </div>
-            <p className="text-[14px] text-slate-300 leading-relaxed max-w-sm">
+            <p className="text-[14px] text-slate-600 leading-relaxed max-w-sm">
               AP and course-load selection for students in India and on the Singapore / US track. A free plan
               first, then a vetted mentor to check it.
             </p>
@@ -61,7 +61,7 @@ export function Footer() {
                 <ul className="space-y-2.5">
                   {c.items.map((i) => (
                     <li key={i.label}>
-                      <Link to={i.to} className="text-[13.5px] text-slate-300 hover:text-paper transition-colors">
+                      <Link to={i.to} className="text-[13.5px] text-slate-600 hover:text-ink transition-colors">
                         {i.label}
                       </Link>
                     </li>
@@ -77,10 +77,10 @@ export function Footer() {
             © {new Date().getFullYear()} Atrium · Athena Education. Guidance only, not a score guarantee.
           </p>
           <div className="flex flex-wrap gap-x-6 gap-y-2">
-            <Link to="/methodology" className="text-[12px] text-slate-400 hover:text-paper transition-colors">
+            <Link to="/methodology" className="text-[12px] text-slate-400 hover:text-ink transition-colors">
               Methodology
             </Link>
-            <Link to="/safeguarding" className="text-[12px] text-slate-400 hover:text-paper transition-colors">
+            <Link to="/safeguarding" className="text-[12px] text-slate-400 hover:text-ink transition-colors">
               Safeguarding
             </Link>
           </div>

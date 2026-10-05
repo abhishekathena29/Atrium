@@ -1,9 +1,11 @@
 import { COVERAGE, GRAPH_VERSION, MAPPED_COVERAGE } from '../../data/overlapGraph';
 import { IB_CORE_HOURS, LEVEL_HOURS } from '../../engine/courseLoad';
+import { ADDON_HOURS, AP_INFO, AP_INFO_VERSION, DIFFICULTY_LABEL, HARD_AT } from '../../data/apInfo';
+import { LEVELS, SETUP_XP } from '../../engine/gamification';
 import { PRICE } from '../../data/pricing';
 import { PageIntro, PublicLayout } from './PublicLayout';
 
-const UPDATED = '23 Sep 2026';
+const UPDATED = '2 Oct 2026';
 
 type Row = { name: string; definition: string; source: string; status: 'Real' | 'Illustrative' | 'Proposed' | 'Formula' };
 
@@ -16,8 +18,8 @@ const NUMBERS: Row[] = [
   },
   {
     name: 'Net-new hours / week',
-    definition: 'Net-new hours ÷ weeks to your exam session (from the questionnaire). Shown as a ±15% range.',
-    source: 'Your questionnaire + overlap graph',
+    definition: 'Net-new hours ÷ weeks to your exam session (from your studies step). Shown as a ±15% range.',
+    source: 'Your answers + overlap graph',
     status: 'Formula',
   },
   {
@@ -34,15 +36,39 @@ const NUMBERS: Row[] = [
   },
   {
     name: 'Recommended APs',
-    definition: 'Cheapest first, but only APs whose signal (65% target-major relevance + 35% RIASEC fit) is at least 0.4. APs with no meaningful overlap are never auto-picked. Picked while the running weekly total fits your budget, up to 4, and never two alternatives (e.g. Calc AB and BC).',
+    definition: 'Cheapest first, but only APs whose signal (65% target-major relevance + 35% RIASEC fit) is at least 0.4. APs with no meaningful overlap are never auto-picked. Picked while the running weekly total fits your budget, up to your stretch limit, and never two alternatives (e.g. Calc AB and BC).',
     source: 'Atrium rule, v0',
     status: 'Formula',
   },
   {
     name: 'Weekly budget',
-    definition: 'Extra hours you said you could give × your load factor.',
-    source: 'Your questionnaire',
+    definition: 'Extra hours you said you could give × your load factor × your workload factor.',
+    source: 'Your answers',
     status: 'Formula',
+  },
+  {
+    name: 'Workload factor',
+    definition: '1 − 0.02 × (committed hours − 6), bounded to 0.60–1.00. Committed hours = coaching/tuition + activities. Each committed hour above 6 a week trims the AP budget by 2%.',
+    source: 'Your answers',
+    status: 'Formula',
+  },
+  {
+    name: 'Stretch limit',
+    definition: 'Up to 2 demanding APs (difficulty ' + HARD_AT + '+) and 4 in total. If Neuroticism ≥ 3.5 or Conscientiousness < 3, up to 1 demanding AP and 3 in total, so the plan stays sustainable. SG/US: demanding AP add-ons beyond the limit are left for a later cycle, and US high-school AP classes beyond it that aren’t core or rigor subjects for your major move to Honors.',
+    source: 'Big Five short form (IPIP), 1–5 scale',
+    status: 'Formula',
+  },
+  {
+    name: 'AP difficulty (1–5)',
+    definition: 'An editorial rating of breadth, depth and how much maths each exam leans on: ' + AP_INFO.map((a) => a.name.replace('AP ', '') + ' ' + a.difficulty).join(', ') + '. Labels: ' + Object.entries(DIFFICULTY_LABEL).map(([k, v]) => k + ' ' + v).join(', ') + '. Not taken from pass rates.',
+    source: 'Atrium editorial, ' + AP_INFO_VERSION,
+    status: 'Illustrative',
+  },
+  {
+    name: 'AP add-on hours (IB / A-Level)',
+    definition: 'Weekly self-study hours for an AP taken on top of IB or A-Levels, by difficulty: ' + Object.entries(ADDON_HOURS).map(([k, v]) => k + ' → ' + v).join(', ') + '. When your week is over the ceiling: add-ons unrelated to your major go first, then the lowest-value school subject moves down a level (never a core or rigor subject, and IB keeps 3+ HL, A-Level 3+ full A-Levels), then the remaining add-ons, lowest value first. Any add-on that fits again afterwards is put back.',
+    source: 'Atrium estimate, pending outcome data',
+    status: 'Illustrative',
   },
   {
     name: 'Load factor',
@@ -52,7 +78,7 @@ const NUMBERS: Row[] = [
   },
   {
     name: 'Weekly load ceiling (SG/US)',
-    definition: 'min(35, 42 − 0.67 × committed hours) × load factor, and never below 12. Committed hours = training + other outside commitments.',
+    definition: 'min(35, 42 − 0.67 × committed hours) × load factor, and never below 12. Committed hours = training + coaching/tuition + activities.',
     source: 'Self-reported training & commitments',
     status: 'Formula',
   },
@@ -76,9 +102,21 @@ const NUMBERS: Row[] = [
   },
   {
     name: 'XP, levels, streaks, awards',
-    definition: 'XP: onboarding 50, questionnaire 100, 1 per 3 minutes of logged study, 15 per plan unit ticked off, 40 per consult requested, 100 per consult completed, 150 per outcome reported, 30 for linking a parent, and 25 per award. Levels start at 0 / 150 / 400 / 750 / 1,200 / 1,800 / 2,600 / 3,600 XP. A streak is consecutive calendar days with logged study, counting from today or yesterday. The weekly goal is your plan’s net-new hours (India) or planned load (SG/US).',
+    definition: `XP: personality questions ${SETUP_XP.personality}, interest questions ${SETUP_XP.interests}, your studies ${SETUP_XP.studies}, goals ${SETUP_XP.goals}, your week ${SETUP_XP.week}, whole profile complete ${SETUP_XP.complete}, 1 per 3 minutes of logged study, 15 per plan unit ticked off, 40 per consult requested, 100 per consult completed, 150 per outcome reported, 30 for linking a parent, and 25 per award. Levels: ${LEVELS.map((l) => `${l.name} ${l.min.toLocaleString('en-US')}`).join(' · ')} XP. A streak is consecutive calendar days with logged study, counting from today or yesterday. The weekly goal is your plan’s net-new hours (India) or planned load (SG/US).`,
     source: 'Your own activity, recomputed on every view',
     status: 'Formula',
+  },
+  {
+    name: 'Profile completion %',
+    definition: 'Share of the five setup sections you have saved: personality, interests, your studies, goals (majors + target countries) and your week. Dream universities and a linked parent are listed as optional and don’t count, so 100% matches the “whole profile complete” XP and the Mapmaker award.',
+    source: 'Your saved answers',
+    status: 'Formula',
+  },
+  {
+    name: 'Time estimates',
+    definition: 'About 6 minutes for the About-you questions (38 taps) and about 4 for your studies, so about 10 minutes in total. The plan itself is computed instantly. Rough estimates, not measured averages.',
+    source: 'Atrium estimate',
+    status: 'Illustrative',
   },
   {
     name: 'Users, mentors, outcomes',
@@ -147,11 +185,12 @@ export function Methodology() {
       <section className="bg-canvas border-b border-line">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 py-16 grid lg:grid-cols-2 gap-14">
           <div>
-            <h2 className="font-jakarta font-bold text-ink text-[24px] mb-4">The questionnaire</h2>
+            <h2 className="font-jakarta font-bold text-ink text-[24px] mb-4">The questions</h2>
             <ul className="space-y-4 text-[14px] text-slate-600 leading-relaxed">
-              <li><span className="text-ink font-medium">Temperament & load:</span> a 20-item Big Five short form in the style of the public-domain IPIP Mini-IPIP. Conscientiousness and Neuroticism set the load factor and pacing advice.</li>
-              <li><span className="text-ink font-medium">Interest → direction:</span> 18 RIASEC / Holland activity items. They give the Holland code and the interest fit for each subject or AP.</li>
-              <li><span className="text-ink font-medium">Targets & constraints:</span> target majors and colleges, existing commitments, available hours, weeks to exam and training hours.</li>
+              <li><span className="text-ink font-medium">About you, part 1 (temperament):</span> a 20-item Big Five short form in the style of the public-domain IPIP Mini-IPIP. Conscientiousness and Neuroticism set the load factor, the stretch limit and pacing advice. A few idioms carry a plain-English hint.</li>
+              <li><span className="text-ink font-medium">About you, part 2 (interests):</span> 18 RIASEC / Holland activity items. They give the Holland code and the interest fit for each subject or AP.</li>
+              <li><span className="text-ink font-medium">Your studies:</span> your base curriculum first (board, IB, A-Levels or a US high school), then APs as a separate add-on, then majors, target countries and universities, then coaching, activity and training hours.</li>
+              <li><span className="text-ink font-medium">Target countries:</span> US and UK guidance is written separately and never blended. We never say a university requires an AP. We point you to each course&apos;s published entry requirements.</li>
               <li>These are validated instrument families, not MBTI. The v1 item set is <span className="text-ink">pending expert vetting</span>.</li>
             </ul>
           </div>
@@ -182,7 +221,7 @@ export function Methodology() {
             <h2 className="font-jakarta font-bold text-ink text-[24px] mb-4">What we don't claim</h2>
             <ul className="space-y-2 text-[14px] text-slate-600 leading-relaxed list-disc pl-5">
               <li>Plans are guidance. They are not a score or admissions guarantee.</li>
-              <li>No AI writes anything a student sees without a human checking it. There is no AI layer yet.</li>
+              <li>The AI layer (“Ask Atrium” and the AI plan review) is always labelled AI-generated. It is given your rule-based plan and this page’s rules, may only pick from the plan’s candidate courses, and is told never to claim a university requires an AP. It can still be wrong. Check important decisions with a mentor.</li>
               <li>No testimonials, ratings or outcome stats until they are real, consented and dated.</li>
             </ul>
           </div>

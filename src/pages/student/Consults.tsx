@@ -22,7 +22,7 @@ export function Consults() {
   const consults = listConsults((c) => c.studentId === user!.id);
   const hadFree = consults.some((c) => c.kind === 'free' && c.status !== 'cancelled' && c.status !== 'declined');
 
-  const [kind, setKind] = useState<'free' | 'paid'>(kindParam === 'paid' ? 'paid' : 'free');
+  const [kind, setKind] = useState<'free' | 'paid'>(kindParam === 'paid' || hadFree ? 'paid' : 'free');
   const [mentorId, setMentorId] = useState<string>('');
   const [topic, setTopic] = useState(subjects.length ? `Validate my plan: ${subjects.slice(0, 3).join(', ')}` : 'Help me choose');
   const [times, setTimes] = useState('');
@@ -85,7 +85,7 @@ export function Consults() {
         subtitle="Start with a free 20-minute consult. Book a paid consult when you want a deeper plan."
         action={
           !kindParam && (
-            <button onClick={() => setParams({ new: 'free' })} className={btnPrimary}>
+            <button onClick={() => { const k = hadFree ? 'paid' : 'free'; setKind(k); setParams({ new: k }); }} className={btnPrimary}>
               <span className="material-symbols-outlined text-[18px]">add</span>
               New request
             </button>
@@ -106,7 +106,7 @@ export function Consults() {
                   onClick={() => setKind(k)}
                   className={
                     'text-left rounded-2xl border-2 p-4 ' +
-                    (kind === k ? 'border-leaf-500 bg-white ring-4 ring-leaf-100' : 'border-line bg-white')
+                    (kind === k ? 'border-leaf-500 bg-canvas ring-4 ring-leaf-100' : 'border-line bg-canvas')
                   }
                 >
                   <p className="font-jakarta font-bold text-ink text-[17px]">{k === 'free' ? 'Free 20-min consult' : 'Paid consult'}</p>
