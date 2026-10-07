@@ -71,7 +71,7 @@ export function Plan() {
             <span className="material-symbols-outlined">close</span>
           </button>
           <div className="relative">
-            <p className="text-[13px] font-bold uppercase tracking-widest text-leaf-800">Setup complete · <XpCount xp={g.xp} /> XP · Level {g.level} {g.levelName}</p>
+            <p className="text-[13px] font-bold uppercase tracking-widest text-leaf-800">Setup complete: <XpCount xp={g.xp} /> XP, Level {g.level} {g.levelName}</p>
             <h1 className="font-jakarta font-extrabold text-[28px] sm:text-[34px] leading-tight mt-1">🎉 Your plan is ready, {user!.name.split(' ')[0]}!</h1>
             <div className="flex flex-wrap items-center gap-3 mt-4">
               {g.awards.filter((a) => a.earned).map((a) => (

@@ -287,7 +287,7 @@ export function StudentDashboard({ user }: { user: User }) {
               Parents can see your plan and approve paid consults. They sign up as a parent with this code:
             </p>
             <p className="mt-3 font-mono text-[22px] font-bold tracking-[0.25em] text-leaf-800 bg-leaf-50 rounded-2xl px-4 py-2.5 w-fit">
-              {user.parentInviteCode ?? '—'}
+              {user.parentInviteCode ?? 'Not generated'}
             </p>
           </Panel>
 

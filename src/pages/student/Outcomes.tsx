@@ -122,7 +122,7 @@ export function Outcomes() {
                   <p className="text-[13.5px] font-medium text-ink">{r.subject}</p>
                   <p className="text-[12px] text-slate-500">{r.examSession}{r.score ? ` · result ${r.score}` : ''}</p>
                   <p className="text-[12px] text-slate-600 mt-1">
-                    Predicted {r.predictedHoursPerWeek ?? '—'} → actual {r.actualHoursPerWeek} hrs/wk
+                    Predicted {r.predictedHoursPerWeek ?? 'n/a'} → actual {r.actualHoursPerWeek} hrs/wk
                   </p>
                 </li>
               ))}

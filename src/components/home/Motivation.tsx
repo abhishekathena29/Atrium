@@ -25,8 +25,7 @@ export function Motivation() {
     <section className="bg-gradient-to-b from-violet-50/60 to-paper">
       <div className="max-w-7xl mx-auto px-6 lg:px-10 py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div>
-          <p className="text-[13px] font-bold uppercase tracking-widest text-violet-600">Stay motivated</p>
-          <h2 className="font-jakarta font-extrabold text-ink text-[34px] sm:text-[40px] leading-tight mt-3">
+          <h2 className="font-jakarta font-extrabold text-ink text-[34px] sm:text-[40px] leading-tight">
             Self-study is easier when you can see it adding up
           </h2>
           <p className="text-[15px] text-slate-600 leading-relaxed mt-4">
@@ -41,8 +40,8 @@ export function Motivation() {
               </div>
             ))}
           </div>
-          <Link to="/signup?role=student" className="mt-8 inline-flex items-center gap-2 bg-violet-600 text-white text-[14px] font-semibold rounded-full px-5 py-3 hover:brightness-110 hover:shadow-glow transition-colors">
-            Start your streak
+          <Link to="/signup?role=student" className="mt-8 inline-flex items-center gap-2 bg-leaf-600 text-white text-[14px] font-semibold rounded-full px-5 py-3 hover:brightness-110 hover:shadow-glow transition-colors">
+            Get your free plan
             <span aria-hidden="true" className="material-symbols-outlined text-[18px]">arrow_forward</span>
           </Link>
         </div>

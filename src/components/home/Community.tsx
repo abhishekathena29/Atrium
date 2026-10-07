@@ -34,7 +34,7 @@ export function Community() {
           <h3 className="relative font-jakarta font-extrabold text-[28px] leading-tight mt-2">Teach what you just learned</h3>
           <p className="relative text-[14.5px] text-slate-600 mt-3 leading-relaxed">
             Self-studied APs alongside CBSE, or carried IB through competition? We are recruiting founding mentors one at a
-            time. Proposed: $28–$45/hr at a rate you set, 4–10 hrs a week.
+            time. Proposed: $28-$45/hr at a rate you set, 4-10 hrs a week.
           </p>
           <ol className="relative mt-6 flex flex-wrap items-center gap-2 flex-1 content-start">
             {MENTOR_STEPS.map((s, i) => (

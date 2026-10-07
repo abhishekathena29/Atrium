@@ -47,8 +47,7 @@ export function Tracks() {
         </div>
 
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <p className="text-[13px] font-bold uppercase tracking-widest text-leaf-600">Two tracks, one planner</p>
-          <h2 className="font-jakarta font-extrabold text-ink text-[34px] sm:text-[40px] leading-tight mt-3">
+          <h2 className="font-jakarta font-extrabold text-ink text-[34px] sm:text-[40px] leading-tight">
             Built for the choice in front of you
           </h2>
         </div>

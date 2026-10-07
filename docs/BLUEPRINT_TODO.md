@@ -241,6 +241,18 @@ workload, interests, curriculum, intended major and target country. Order: **UI 
 - [x] Separate student / parent / mentor journeys and dashboards; parent dashboard now shows the child's setup completion and goals
 - [ ] Keep the flow simple and professional enough for a school pitch (Mr. Munjal's institution): walk the flow end to end before the demo
 
+## Pass 5 (2026-10-08): home page design-taste audit
+The 2026-10-02 meeting brief was re-reviewed; every item already maps to Pass 4. This pass only tightened the home page.
+- [x] Section labels cut to 2 on the home page ("How it works", the For parents / For mentors card labels); removed from Tracks, Try it, Stay motivated, Subjects, FAQ
+- [x] Hero: dropped the "Free AP planner" pill and the tick strip under the entry cards (one message, one choice)
+- [x] Subjects header stacked (was a left headline + floating right paragraph)
+- [x] "How it works" is a left-aligned timeline whose connector fills on scroll-in (IntersectionObserver; instant under reduced motion), replacing 4 centred hover-lift cards that weren't clickable
+- [x] No em/en dashes in visible copy: title, plan row asides, unit notes in the overlap graph, empty-value placeholders, ranges (now hyphens)
+- [x] Same audit for `/india` and `/sg-us`: hero text cut to one line each, the section labels after the hero became headings, numbered points ("01".."04") became icons, the sample-plan caption is plain text, and the left column is sticky beside the long sample plan
+- [x] One button label per action across public pages: student sign-up = "Get your free plan" (green everywhere), mentor sign-up = "Apply to mentor"
+- [x] App screens: progress labels (quiz/onboarding step, setup XP) stay as one per screen; lines with two middle dots reworded
+- [x] 320 / 375 px checked with DevTools mobile emulation (2026-10-08): no horizontal overflow on home, /india, /sg-us, /methodology, /safeguarding, /signin, /signup. Removed the floating "Get your free plan" button on phones; the nav already pins a "Free plan" button, and the floating one covered the sample card
+
 ## Out of scope / needs a backend
 - Real auth with hashed passwords (currently localStorage, plain text; prototype only)
 - Payments (India INR 499–1,999; SG/US USD 25–45; 20–25% take rate). The UI shows "approve & pay" with no charge.
@@ -268,3 +280,4 @@ workload, interests, curriculum, intended major and target country. Order: **UI 
 - 2026-10-02: Setup XP is per section (personality 40, interests 40, studies 25, goals 25, week 20, whole profile 50), still derived. New awards: Curious mind, Mapmaker.
 - 2026-10-02 (cross-check): Always read the intake with `intakeOf(user)` (by segment), never `india ?? sgus`; a track switch in onboarding clears the other intake. The exam session is stored as `career.examDate` and weeks are recomputed live (`liveWeeksToExam`). A retaken quiz rebuilds the profile automatically. Onboarding saves a resumable `progress.draft` on every Continue, and setup XP reads it. The SG/US engine restores add-ons that fit again after dropping, and the stretch upgrade respects the demanding/total caps and IB/A-Level ≤4 top-level subjects. Profile completion % counts only the five required sections.
 - 2026-10-01: Site switched to a single dark "study HUD" theme (no light mode). Token names kept so components did not change meaning; `bg-white` became `bg-canvas`, filled-button hovers brighten and glow instead of going to a darker shade.
+- 2026-10-08: Visible copy uses no em or en dashes (ranges use '-', empty values use words like 'None yet'). The home page keeps at most one small uppercase section label per three sections.

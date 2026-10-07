@@ -8,8 +8,8 @@
  * the outcome loop (M6) are meant to sharpen these numbers over time.
  */
 
-import type { RiasecType } from './questionnaire';
-import type { IndiaIntake } from '../auth/types';
+import type { RiasecType } from './questionnaire.ts';
+import type { IndiaIntake } from '../auth/types.ts';
 
 export const GRAPH_VERSION = 'v0 · illustrative · Sep 2026';
 
@@ -38,7 +38,7 @@ export interface ApUnit {
 export interface ApCourse {
   id: string;
   name: string;
-  /** Hours for exam format, FRQ style, and timing — never covered by a board. */
+  /** Hours for exam format, FRQ style, and timing; never covered by a board. */
   examFormatHours: number;
   examFormatNote: string;
   majors: string[];
@@ -55,11 +55,11 @@ const calcAbUnits: ApUnit[] = [
   { name: 'Limits & continuity', prepHours: 12, board: 'Mathematics', overlap: 'full', boardRef: 'XI Limits & Derivatives; XII Continuity & Differentiability' },
   { name: 'Differentiation: definition & rules', prepHours: 14, board: 'Mathematics', overlap: 'full', boardRef: 'XI Limits & Derivatives' },
   { name: 'Composite, implicit & inverse functions', prepHours: 12, board: 'Mathematics', overlap: 'full', boardRef: 'XII Continuity & Differentiability' },
-  { name: "Contextual applications (related rates, L'Hôpital)", prepHours: 12, board: 'Mathematics', overlap: 'partial', boardRef: "XII Application of Derivatives — L'Hôpital not taught" },
+  { name: "Contextual applications (related rates, L'Hôpital)", prepHours: 12, board: 'Mathematics', overlap: 'partial', boardRef: "XII Application of Derivatives; L'Hôpital not taught" },
   { name: 'Analytical applications (MVT, extrema)', prepHours: 14, board: 'Mathematics', overlap: 'full', boardRef: 'XII Application of Derivatives' },
   { name: 'Integration & accumulation of change', prepHours: 18, board: 'Mathematics', overlap: 'full', boardRef: 'XII Integrals' },
-  { name: 'Differential equations & slope fields', prepHours: 10, board: 'Mathematics', overlap: 'partial', boardRef: 'XII Differential Equations — slope fields not taught' },
-  { name: 'Applications of integration (area, volume)', prepHours: 12, board: 'Mathematics', overlap: 'partial', boardRef: 'XII Application of Integrals — volumes not taught' },
+  { name: 'Differential equations & slope fields', prepHours: 10, board: 'Mathematics', overlap: 'partial', boardRef: 'XII Differential Equations; slope fields not taught' },
+  { name: 'Applications of integration (area, volume)', prepHours: 12, board: 'Mathematics', overlap: 'partial', boardRef: 'XII Application of Integrals; volumes not taught' },
 ];
 
 export const AP_COURSES: ApCourse[] = [
@@ -111,7 +111,7 @@ export const AP_COURSES: ApCourse[] = [
     majors: ['Engineering', 'Physics', 'Computer Science', 'Mathematics'],
     riasec: ['I', 'R'],
     units: [
-      { name: 'Kinematics (calculus-based)', prepHours: 10, board: 'Physics', overlap: 'partial', boardRef: 'XI Motion — algebra-based treatment' },
+      { name: 'Kinematics (calculus-based)', prepHours: 10, board: 'Physics', overlap: 'partial', boardRef: 'XI Motion; algebra-based treatment' },
       { name: 'Force, drag & variable forces', prepHours: 14, board: 'Physics', overlap: 'partial', boardRef: 'XI Laws of Motion' },
       { name: 'Work & energy (line integrals)', prepHours: 10, board: 'Physics', overlap: 'partial', boardRef: 'XI Work, Energy and Power' },
       { name: 'Systems of particles & momentum', prepHours: 10, board: 'Physics', overlap: 'partial', boardRef: 'XI System of Particles' },
@@ -130,7 +130,7 @@ export const AP_COURSES: ApCourse[] = [
     units: [
       { name: 'Electrostatics & Gauss’s law', prepHours: 14, board: 'Physics', overlap: 'partial', boardRef: 'XII Electric Charges and Fields' },
       { name: 'Conductors & capacitors', prepHours: 10, board: 'Physics', overlap: 'full', boardRef: 'XII Electrostatic Potential and Capacitance' },
-      { name: 'Circuits incl. RC transients', prepHours: 12, board: 'Physics', overlap: 'partial', boardRef: 'XII Current Electricity — RC transients not taught' },
+      { name: 'Circuits incl. RC transients', prepHours: 12, board: 'Physics', overlap: 'partial', boardRef: 'XII Current Electricity; RC transients not taught' },
       { name: 'Magnetic fields & Ampère’s law', prepHours: 12, board: 'Physics', overlap: 'partial', boardRef: 'XII Moving Charges and Magnetism' },
       { name: 'Induction & LR circuits', prepHours: 14, board: 'Physics', overlap: 'partial', boardRef: 'XII Electromagnetic Induction' },
       { name: 'Calculus-based field problems', prepHours: 12, board: null, overlap: 'none', boardRef: 'Not taught with calculus on the board' },
@@ -146,12 +146,12 @@ export const AP_COURSES: ApCourse[] = [
     units: [
       { name: 'Atomic structure & properties', prepHours: 12, board: 'Chemistry', overlap: 'full', boardRef: 'XI Structure of Atom; Classification of Elements' },
       { name: 'Molecular & ionic bonding', prepHours: 12, board: 'Chemistry', overlap: 'full', boardRef: 'XI Chemical Bonding and Molecular Structure' },
-      { name: 'Intermolecular forces & properties', prepHours: 14, board: 'Chemistry', overlap: 'partial', boardRef: 'XII Solutions — gases/IMF depth gap' },
+      { name: 'Intermolecular forces & properties', prepHours: 14, board: 'Chemistry', overlap: 'partial', boardRef: 'XII Solutions; gases/IMF depth gap' },
       { name: 'Chemical reactions & stoichiometry', prepHours: 12, board: 'Chemistry', overlap: 'full', boardRef: 'XI Some Basic Concepts; Redox Reactions' },
       { name: 'Kinetics', prepHours: 12, board: 'Chemistry', overlap: 'full', boardRef: 'XII Chemical Kinetics' },
       { name: 'Thermodynamics', prepHours: 12, board: 'Chemistry', overlap: 'full', boardRef: 'XI Thermodynamics' },
       { name: 'Equilibrium', prepHours: 14, board: 'Chemistry', overlap: 'full', boardRef: 'XI Equilibrium' },
-      { name: 'Acids, bases & buffers', prepHours: 14, board: 'Chemistry', overlap: 'partial', boardRef: 'XI Equilibrium — titration curves in less depth' },
+      { name: 'Acids, bases & buffers', prepHours: 14, board: 'Chemistry', overlap: 'partial', boardRef: 'XI Equilibrium; titration curves in less depth' },
       { name: 'Entropy, Gibbs & electrochemistry', prepHours: 12, board: 'Chemistry', overlap: 'full', boardRef: 'XI Thermodynamics; XII Electrochemistry' },
     ],
   },
@@ -166,7 +166,7 @@ export const AP_COURSES: ApCourse[] = [
       { name: 'Chemistry of life', prepHours: 8, board: 'Biology', overlap: 'partial', boardRef: 'XI Biomolecules' },
       { name: 'Cell structure & function', prepHours: 12, board: 'Biology', overlap: 'full', boardRef: 'XI Cell: The Unit of Life' },
       { name: 'Cellular energetics', prepHours: 14, board: 'Biology', overlap: 'full', boardRef: 'XI Photosynthesis; Respiration in Plants' },
-      { name: 'Cell communication & cell cycle', prepHours: 12, board: 'Biology', overlap: 'partial', boardRef: 'XI Cell Cycle — signalling not taught' },
+      { name: 'Cell communication & cell cycle', prepHours: 12, board: 'Biology', overlap: 'partial', boardRef: 'XI Cell Cycle; signalling not taught' },
       { name: 'Heredity', prepHours: 12, board: 'Biology', overlap: 'full', boardRef: 'XII Principles of Inheritance and Variation' },
       { name: 'Gene expression & regulation', prepHours: 14, board: 'Biology', overlap: 'full', boardRef: 'XII Molecular Basis of Inheritance' },
       { name: 'Natural selection', prepHours: 12, board: 'Biology', overlap: 'full', boardRef: 'XII Evolution' },
@@ -197,7 +197,7 @@ export const AP_COURSES: ApCourse[] = [
     majors: ['Computer Science', 'Engineering', 'Mathematics'],
     riasec: ['I', 'R', 'C'],
     units: [
-      { name: 'Primitive types, objects & methods', prepHours: 14, board: 'Computer Science', overlap: 'partial', boardRef: 'CBSE CS uses Python — concepts carry, Java syntax is new' },
+      { name: 'Primitive types, objects & methods', prepHours: 14, board: 'Computer Science', overlap: 'partial', boardRef: 'CBSE CS uses Python; concepts carry, Java syntax is new' },
       { name: 'Booleans, conditionals & iteration', prepHours: 14, board: 'Computer Science', overlap: 'full', boardRef: 'XI Flow of Control' },
       { name: 'Writing classes', prepHours: 18, board: null, overlap: 'none', boardRef: 'OOP class design not on the syllabus' },
       { name: 'Arrays, ArrayList & 2D arrays', prepHours: 20, board: 'Computer Science', overlap: 'partial', boardRef: 'XI Lists; XII Stacks' },
@@ -259,7 +259,7 @@ export const AP_COURSES: ApCourse[] = [
     majors: ['English / Literature', 'Political Science / PPE', 'History', 'Business'],
     riasec: ['A', 'S', 'E'],
     units: [
-      { name: 'Rhetorical analysis', prepHours: 20, board: 'English', overlap: 'partial', boardRef: 'English Core — reading comprehension' },
+      { name: 'Rhetorical analysis', prepHours: 20, board: 'English', overlap: 'partial', boardRef: 'English Core; reading comprehension' },
       { name: 'Argument writing', prepHours: 22, board: null, overlap: 'none', boardRef: 'Board writing tasks are format-based, not argument essays' },
       { name: 'Synthesis from sources', prepHours: 18, board: null, overlap: 'none', boardRef: 'Not on the syllabus' },
     ],
@@ -272,10 +272,10 @@ export const AP_COURSES: ApCourse[] = [
     majors: ['History', 'Political Science / PPE', 'English / Literature'],
     riasec: ['A', 'I', 'S'],
     units: [
-      { name: '1491–1754: colonial America', prepHours: 25, board: null, overlap: 'none', boardRef: 'Not on the syllabus' },
-      { name: '1754–1877: revolution to reconstruction', prepHours: 45, board: null, overlap: 'none', boardRef: 'Not on the syllabus' },
-      { name: '1877–1945: industrialisation to WWII', prepHours: 45, board: null, overlap: 'none', boardRef: 'Not on the syllabus' },
-      { name: '1945–present', prepHours: 35, board: null, overlap: 'none', boardRef: 'Not on the syllabus' },
+      { name: '1491-1754: colonial America', prepHours: 25, board: null, overlap: 'none', boardRef: 'Not on the syllabus' },
+      { name: '1754-1877: revolution to reconstruction', prepHours: 45, board: null, overlap: 'none', boardRef: 'Not on the syllabus' },
+      { name: '1877-1945: industrialisation to WWII', prepHours: 45, board: null, overlap: 'none', boardRef: 'Not on the syllabus' },
+      { name: '1945-present', prepHours: 35, board: null, overlap: 'none', boardRef: 'Not on the syllabus' },
     ],
   },
 ];

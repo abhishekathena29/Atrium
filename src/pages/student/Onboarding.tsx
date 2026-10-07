@@ -311,7 +311,7 @@ export function Onboarding() {
                       on={sgus.curriculum === c}
                       onClick={() => c !== sgus.curriculum && setSgus({ ...sgus, curriculum: c, courses: [], apAddOns: [] })}
                       title={CURRICULUM_LABEL[c]}
-                      body={c === 'IB' ? '6 subjects, 3–4 at Higher Level' : c === 'A-Level' ? 'Usually 3–4 subjects' : 'Classes at standard, Honors or AP level'}
+                      body={c === 'IB' ? '6 subjects, 3-4 at Higher Level' : c === 'A-Level' ? 'Usually 3-4 subjects' : 'Classes at standard, Honors or AP level'}
                       tone="sky"
                     />
                   ))}

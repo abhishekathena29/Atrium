@@ -4,9 +4,9 @@
  * the facts. The text is deterministic (no dates, no randomness) so it can be prompt-cached.
  */
 
-import { ADDON_HOURS, AP_INFO, AP_INFO_VERSION, DIFFICULTY_LABEL, HARD_AT, MAX_HARD } from '../src/data/apInfo';
-import { COUNTRY_GUIDE } from '../src/data/countries';
-import { AP_COURSES, COVERAGE, GRAPH_VERSION, MAPPED_COVERAGE } from '../src/data/overlapGraph';
+import { ADDON_HOURS, AP_INFO, AP_INFO_VERSION, DIFFICULTY_LABEL, HARD_AT, MAX_HARD } from '../src/data/apInfo.ts';
+import { COUNTRY_GUIDE } from '../src/data/countries.ts';
+import { AP_COURSES, COVERAGE, GRAPH_VERSION, MAPPED_COVERAGE } from '../src/data/overlapGraph.ts';
 
 const RULES = `# Atrium's rules (always follow)
 - Atrium gives guidance only. Never promise a score, an admission outcome or a scholarship.

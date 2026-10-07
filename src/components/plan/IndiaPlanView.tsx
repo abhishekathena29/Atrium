@@ -14,7 +14,7 @@ const TONE: Record<ApPlanItem['band'], Tone> = { 'High overlap': 'green', Partia
 function range(n: number) {
   const lo = Math.max(0, Math.floor(n * 0.85));
   const hi = Math.ceil(n * 1.15);
-  return lo === hi ? `~${hi} hrs` : `~${lo}–${hi} hrs`;
+  return lo === hi ? `~${hi} hrs` : `~${lo}-${hi} hrs`;
 }
 
 export function IndiaPlanView({
@@ -90,7 +90,7 @@ export function IndiaPlanView({
 
       <div className="grid sm:grid-cols-3 gap-3 stagger">
         <SummaryTile label="How many APs" value={n ? `${n} this cycle` : 'None yet'} />
-        <SummaryTile label="The mix" value={n ? `${hard} demanding · ${n - hard} manageable` : '—'} />
+        <SummaryTile label="The mix" value={n ? `${hard} demanding · ${n - hard} manageable` : 'None yet'} />
         <SummaryTile label="Extra study / week" value={`${range(plan.netNewPerWeek)} of ${plan.budgetPerWeek}`} />
       </div>
 

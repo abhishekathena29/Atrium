@@ -51,12 +51,7 @@ export function HomeHero() {
       <div className="relative max-w-7xl mx-auto px-5 sm:px-6 lg:px-10 pt-14 pb-16 lg:pt-20 lg:pb-24 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         {/* Copy + entry points */}
         <div className="lg:col-span-6 min-w-0 stagger">
-          <span className="inline-flex items-center gap-2 rounded-full border border-leaf-200 bg-leaf-50 px-3.5 py-1.5 text-[12.5px] font-semibold text-leaf-700">
-            <span aria-hidden="true" className="material-symbols-outlined text-[16px]" style={fill}>bolt</span>
-            Free AP planner · about 10 minutes
-          </span>
-
-          <h1 className="mt-5 font-jakarta font-extrabold text-ink text-[40px] sm:text-[54px] lg:text-[60px] leading-[1.04] tracking-tight">
+          <h1 className="font-jakarta font-extrabold text-ink text-[40px] sm:text-[54px] lg:text-[60px] leading-[1.04] tracking-tight">
             Take the right APs.{' '}
             <span className="relative inline-block text-leaf-600">
               Skip the rest.
@@ -91,12 +86,6 @@ export function HomeHero() {
               ))}
             </div>
           </div>
-
-          <p className="mt-5 flex flex-wrap gap-x-4 gap-y-1 text-[12.5px] text-slate-500">
-            <span className="inline-flex items-center gap-1"><span aria-hidden="true" className="material-symbols-outlined text-[16px] text-leaf-600">check</span>Free plan</span>
-            <span className="inline-flex items-center gap-1"><span aria-hidden="true" className="material-symbols-outlined text-[16px] text-leaf-600">check</span>Every reason shown</span>
-            <span className="inline-flex items-center gap-1"><span aria-hidden="true" className="material-symbols-outlined text-[16px] text-leaf-600">check</span>Mentor check optional</span>
-          </p>
         </div>
 
         {/* Visual: floating sample preview cards */}

@@ -93,7 +93,7 @@ function bandFor(coverage: number): OverlapBand {
 
 export function loadLabelFor(netNewHours: number): string {
   if (netNewHours <= 45) return 'Low load';
-  if (netNewHours <= 60) return 'Low–mod load';
+  if (netNewHours <= 60) return 'Low-mod load';
   if (netNewHours <= 80) return 'Moderate load';
   if (netNewHours <= 110) return 'High load';
   return 'Very high load';

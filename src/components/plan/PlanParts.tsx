@@ -47,7 +47,7 @@ export function PlanRow({
         <div className="min-w-0">
           <p className="text-[14.5px] font-semibold text-ink">
             {title}
-            {aside && <span className="font-normal text-slate-500 text-[13px]"> — {aside}</span>}
+            {aside && <span className="font-normal text-slate-500 text-[13px]">: {aside}</span>}
           </p>
           <p className="text-[13px] text-slate-600 mt-0.5 leading-snug">{body}</p>
         </div>

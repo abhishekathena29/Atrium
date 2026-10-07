@@ -18,11 +18,11 @@ export function CtaBand() {
             </div>
             <div className="lg:col-span-4 flex flex-wrap lg:justify-end gap-3">
               <Link to="/signup?role=student" className="animate-glow inline-flex items-center gap-2 bg-leaf-600 text-white text-[15px] font-bold rounded-full px-6 py-3.5 hover:brightness-110 transition-colors">
-                Start the free planner
+                Get your free plan
                 <span aria-hidden="true" className="material-symbols-outlined text-[18px]">arrow_forward</span>
               </Link>
               <Link to="/signup?role=mentor" className="inline-flex items-center gap-2 border-2 border-leaf-300 text-ink text-[15px] font-semibold rounded-full px-6 py-3 hover:bg-leaf-50 transition-colors">
-                Become a mentor
+                Apply to mentor
               </Link>
             </div>
           </div>

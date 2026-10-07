@@ -7,7 +7,7 @@
  * major, and points students to each course's published entry requirements.
  */
 
-import type { TargetCountry } from '../auth/types';
+import type { TargetCountry } from '../auth/types.ts';
 
 export interface CountryGuide {
   country: TargetCountry;

@@ -39,8 +39,7 @@ export function TrustFaq() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
           <div className="lg:col-span-4">
-            <p className="text-[13px] font-bold uppercase tracking-widest text-leaf-600">FAQ</p>
-            <h2 className="font-jakarta font-extrabold text-ink text-[34px] leading-tight mt-3">Questions students and parents ask</h2>
+            <h2 className="font-jakarta font-extrabold text-ink text-[34px] leading-tight">Questions students and parents ask</h2>
             <p className="text-[14.5px] text-slate-600 mt-3">Something else? Ask in your free consult.</p>
           </div>
           <div className="lg:col-span-8 space-y-3">

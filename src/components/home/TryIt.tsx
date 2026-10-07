@@ -31,12 +31,11 @@ export function TryIt() {
     <section className="bg-canvas border-y border-line">
       <div className="max-w-7xl mx-auto px-6 lg:px-10 py-20 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
         <div className="lg:col-span-5 min-w-0">
-          <p className="text-[13px] font-bold uppercase tracking-widest text-leaf-600">Free AP planner · try it · India</p>
-          <h2 className="font-jakarta font-extrabold text-ink text-[32px] sm:text-[38px] leading-tight mt-3">
+          <h2 className="font-jakarta font-extrabold text-ink text-[32px] sm:text-[38px] leading-tight">
             Which APs overlap with your stream?
           </h2>
           <p className="text-[15px] text-slate-600 leading-relaxed mt-4">
-            Pick your CBSE stream and target major. Same engine as your full plan, which also weighs your
+            India track: pick your CBSE stream and target major. Same engine as your full plan, which also weighs your
             personality, weekly hours and exam date.
           </p>
 
@@ -110,7 +109,7 @@ export function TryIt() {
               </p>
             )}
             <Link to="/signup?role=student&segment=india" className="relative mt-6 inline-flex items-center gap-2 bg-leaf-600 text-white text-[14px] font-semibold rounded-full px-5 py-3 hover:brightness-110 hover:shadow-glow transition-colors">
-              Get my full plan, free
+              Get your free plan
               <span aria-hidden="true" className="material-symbols-outlined text-[18px]">arrow_forward</span>
             </Link>
           </div>

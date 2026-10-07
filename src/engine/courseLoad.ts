@@ -140,7 +140,7 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 export function formatMonths(months: number[]): string {
   if (!months.length) return '';
   const sorted = [...months].sort((a, b) => a - b);
-  return sorted.length > 2 ? `${MONTHS[sorted[0] - 1]}–${MONTHS[sorted[sorted.length - 1] - 1]}` : sorted.map((m) => MONTHS[m - 1]).join(' & ');
+  return sorted.length > 2 ? `${MONTHS[sorted[0] - 1]}-${MONTHS[sorted[sorted.length - 1] - 1]}` : sorted.map((m) => MONTHS[m - 1]).join(' & ');
 }
 
 /**

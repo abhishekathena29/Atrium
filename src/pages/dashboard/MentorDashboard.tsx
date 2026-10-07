@@ -196,7 +196,7 @@ export function MentorDashboard({ user }: { user: User }) {
           </Panel>
           <Panel title="Payouts">
             <p className="text-[13px] text-slate-600 leading-relaxed">
-              Proposed model: you set your own rate ($28–$45/hr) after onboarding, with a monthly stipend. Payouts
+              Proposed model: you set your own rate ($28-$45/hr) after onboarding, with a monthly stipend. Payouts
               aren't live in the prototype.
             </p>
           </Panel>

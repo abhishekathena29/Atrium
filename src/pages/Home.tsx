@@ -9,7 +9,6 @@ import { Community } from '../components/home/Community';
 import { TrustFaq } from '../components/home/TrustFaq';
 import { CtaBand } from '../components/home/CtaBand';
 import { Footer } from '../components/Footer';
-import { MobileFAB } from '../components/MobileFAB';
 
 export function Home() {
   return (
@@ -27,7 +26,6 @@ export function Home() {
         <CtaBand />
       </main>
       <Footer />
-      <MobileFAB />
     </div>
   );
 }

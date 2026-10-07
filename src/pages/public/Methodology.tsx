@@ -24,13 +24,13 @@ const NUMBERS: Row[] = [
   },
   {
     name: 'Overlap band',
-    definition: 'High overlap if the board already covers ≥55% of the AP’s total hours, Partial at 25–55%, None below 25%.',
+    definition: 'High overlap if the board already covers ≥55% of the AP’s total hours, Partial at 25-55%, None below 25%.',
     source: 'Atrium rule, v0',
     status: 'Formula',
   },
   {
     name: 'Load label',
-    definition: 'Low ≤45 net-new hours, Low–mod ≤60, Moderate ≤80, High ≤110, Very high above that.',
+    definition: 'Low ≤45 net-new hours, Low-mod ≤60, Moderate ≤80, High ≤110, Very high above that.',
     source: 'Atrium rule, v0',
     status: 'Formula',
   },
@@ -48,18 +48,18 @@ const NUMBERS: Row[] = [
   },
   {
     name: 'Workload factor',
-    definition: '1 − 0.02 × (committed hours − 6), bounded to 0.60–1.00. Committed hours = coaching/tuition + activities. Each committed hour above 6 a week trims the AP budget by 2%.',
+    definition: '1 − 0.02 × (committed hours − 6), bounded to 0.60-1.00. Committed hours = coaching/tuition + activities. Each committed hour above 6 a week trims the AP budget by 2%.',
     source: 'Your answers',
     status: 'Formula',
   },
   {
     name: 'Stretch limit',
     definition: 'Up to 2 demanding APs (difficulty ' + HARD_AT + '+) and 4 in total. If Neuroticism ≥ 3.5 or Conscientiousness < 3, up to 1 demanding AP and 3 in total, so the plan stays sustainable. SG/US: demanding AP add-ons beyond the limit are left for a later cycle, and US high-school AP classes beyond it that aren’t core or rigor subjects for your major move to Honors.',
-    source: 'Big Five short form (IPIP), 1–5 scale',
+    source: 'Big Five short form (IPIP), 1-5 scale',
     status: 'Formula',
   },
   {
-    name: 'AP difficulty (1–5)',
+    name: 'AP difficulty (1-5)',
     definition: 'An editorial rating of breadth, depth and how much maths each exam leans on: ' + AP_INFO.map((a) => a.name.replace('AP ', '') + ' ' + a.difficulty).join(', ') + '. Labels: ' + Object.entries(DIFFICULTY_LABEL).map(([k, v]) => k + ' ' + v).join(', ') + '. Not taken from pass rates.',
     source: 'Atrium editorial, ' + AP_INFO_VERSION,
     status: 'Illustrative',
@@ -72,8 +72,8 @@ const NUMBERS: Row[] = [
   },
   {
     name: 'Load factor',
-    definition: '1 + 0.08 × (Conscientiousness − 3) − 0.06 × (Neuroticism − 3), bounded to 0.80–1.15. Temperament nudges the plan and never dominates it.',
-    source: 'Big Five short form (IPIP), 1–5 scale',
+    definition: '1 + 0.08 × (Conscientiousness − 3) − 0.06 × (Neuroticism − 3), bounded to 0.80-1.15. Temperament nudges the plan and never dominates it.',
+    source: 'Big Five short form (IPIP), 1-5 scale',
     status: 'Formula',
   },
   {
@@ -90,13 +90,13 @@ const NUMBERS: Row[] = [
   },
   {
     name: 'Consult prices',
-    definition: `India ${PRICE.india}; SG/US ${PRICE.sgus}. Platform take rate 20–25%. No payment is taken yet.`,
+    definition: `India ${PRICE.india}; SG/US ${PRICE.sgus}. Platform take rate 20-25%. No payment is taken yet.`,
     source: 'Pricing proposal',
     status: 'Proposed',
   },
   {
     name: 'Mentor compensation',
-    definition: '$28–$45/hr, set by the mentor after onboarding, plus a monthly stipend. 4–10 hrs/week.',
+    definition: '$28-$45/hr, set by the mentor after onboarding, plus a monthly stipend. 4-10 hrs/week.',
     source: 'Compensation proposal',
     status: 'Proposed',
   },
@@ -121,7 +121,7 @@ const NUMBERS: Row[] = [
   {
     name: 'Users, mentors, outcomes',
     definition: 'We publish these counts only once they are real and we can source them. Right now there is nothing to publish.',
-    source: '—',
+    source: 'Not applicable',
     status: 'Real',
   },
 ];

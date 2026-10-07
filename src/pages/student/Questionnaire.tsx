@@ -85,7 +85,7 @@ export function Questionnaire() {
     advance.current = window.setTimeout(() => update({ step: idx + 1 }), 180);
   }, [idx, item, progress.answers, update]);
 
-  // Number keys 1–5 answer the current statement.
+  // Number keys 1-5 answer the current statement.
   useEffect(() => {
     if (done || interlude) return;
     const onKey = (e: KeyboardEvent) => {
@@ -196,7 +196,7 @@ export function Questionnaire() {
       {toast && <XpToast key={toast.key} xp={toast.xp} label={toast.label} />}
       <div className="flex items-center justify-between gap-4 mb-3">
         <p className="eyebrow text-leaf-600">
-          About you · part {item.section === 'personality' ? 1 : 2} of 2 · {inSection + 1}/{sectionLen}
+          About you, part {item.section === 'personality' ? 1 : 2} of 2: question {inSection + 1} of {sectionLen}
         </p>
         <span className="text-[12px] font-semibold text-slate-500">{pct}%</span>
       </div>
@@ -239,7 +239,7 @@ export function Questionnaire() {
             );
           })}
         </div>
-        <p className="hidden sm:block text-[11.5px] text-slate-400 mt-4 text-center">Tip: press 1–5 on your keyboard</p>
+        <p className="hidden sm:block text-[11.5px] text-slate-400 mt-4 text-center">Tip: press 1-5 on your keyboard</p>
       </div>
 
       <div className="mt-6 flex items-center justify-between">

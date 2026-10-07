@@ -15,7 +15,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { betaZodOutputFormat } from '@anthropic-ai/sdk/helpers/beta/zod';
 import { z } from 'zod';
-import { KNOWLEDGE_BASE } from './knowledge';
+import { KNOWLEDGE_BASE } from './knowledge.ts';
 
 export const MODEL = 'claude-opus-5-5';
 /** Server-side refusal fallback, "default" mode (routes by refusal category). */

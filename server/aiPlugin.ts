@@ -19,7 +19,7 @@
 
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import type { Connect, Plugin } from 'vite';
-import { AiError, recommend, startChat, toAiError, type AiConfig } from './ai';
+import { AiError, recommend, startChat, toAiError, type AiConfig } from './ai.ts';
 
 const MAX_BODY = 128 * 1024;
 /** Past the limit, the rest of the body is read and discarded up to this size, so the 413 reaches the client. */

@@ -11,14 +11,13 @@ export function Subjects() {
   return (
     <section id="subjects" className="bg-paper">
       <div className="max-w-7xl mx-auto px-6 lg:px-10 py-20">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+        <div className="mb-10">
           <div>
-            <p className="text-[13px] font-bold uppercase tracking-widest text-leaf-600">Subjects</p>
-            <h2 className="font-jakarta font-extrabold text-ink text-[34px] sm:text-[40px] leading-tight mt-3">
+            <h2 className="font-jakarta font-extrabold text-ink text-[34px] sm:text-[40px] leading-tight">
               Courses students weigh up most
             </h2>
           </div>
-          <p className="text-[14.5px] text-slate-600 max-w-md">
+          <p className="text-[14.5px] text-slate-600 max-w-[65ch] mt-3">
             The planner covers these areas. We are recruiting founding mentors in each.
           </p>
         </div>
